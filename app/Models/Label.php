@@ -12,14 +12,14 @@ class Label extends Model
   use HasFactory;
 
   protected $fillable = [
-    'team_id',
+    'board_id',
     'name',
     'color',
   ];
 
-  public function team(): BelongsTo
+  public function board(): BelongsTo
   {
-    return $this->belongsTo(Team::class);
+    return $this->belongsTo(Board::class);
   }
 
   public function cards(): BelongsToMany

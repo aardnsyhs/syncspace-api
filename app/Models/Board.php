@@ -32,4 +32,9 @@ class Board extends Model
   {
     return $this->hasMany(Activity::class)->orderByDesc('created_at');
   }
+
+  public function labels(): HasMany
+  {
+    return $this->hasMany(Label::class);
+  }
 }

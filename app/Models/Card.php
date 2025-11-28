@@ -46,8 +46,36 @@ class Card extends Model
     return $this->belongsToMany(Label::class);
   }
 
+  public function checklists(): HasMany
+  {
+    return $this->hasMany(Checklist::class)->orderBy('position');
+  }
+
+  public function attachments(): HasMany
+  {
+    return $this->hasMany(Attachment::class)->orderByDesc('created_at');
+  }
+
   public function activities(): HasMany
   {
     return $this->hasMany(Activity::class)->orderByDesc('created_at');
+  }
+
+  // Helper untuk mendapatkan checklist progress total
+  public function getChecklistProgressAttribute(): array
+  {
+    $total = 0;
+    $completed = 0;
+
+    foreach ($this->checklists as $checklist) {
+      $total += $checklist->items()->count();
+      $completed += $checklist->items()->where('is_completed', true)->count();
+    }
+
+    return [
+      'total' => $total,
+      'completed' => $completed,
+      'percentage' => $total > 0 ? round(($completed / $total) * 100) : 0,
+    ];
   }
 }

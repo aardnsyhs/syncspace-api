@@ -6,9 +6,14 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\BoardAnalyticsController;
+use App\Http\Controllers\BoardLabelController;
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\CardLabelController;
 use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ChecklistController;
+use App\Http\Controllers\ChecklistItemController;
+use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMemberController;
@@ -88,4 +93,30 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/cards/{card}/comments', [CommentController::class, 'index']);
   Route::post('/cards/{card}/comments', [CommentController::class, 'store']);
   Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+
+  // Board Labels
+  Route::get('/boards/{board}/labels', [BoardLabelController::class, 'index']);
+  Route::post('/boards/{board}/labels', [BoardLabelController::class, 'store']);
+  Route::patch('/boards/{board}/labels/{label}', [BoardLabelController::class, 'update']);
+  Route::delete('/boards/{board}/labels/{label}', [BoardLabelController::class, 'destroy']);
+
+  // Card Labels
+  Route::post('/cards/{card}/labels', [CardLabelController::class, 'store']);
+  Route::delete('/cards/{card}/labels/{label}', [CardLabelController::class, 'destroy']);
+
+  // Checklists
+  Route::get('/cards/{card}/checklists', [ChecklistController::class, 'index']);
+  Route::post('/cards/{card}/checklists', [ChecklistController::class, 'store']);
+  Route::patch('/checklists/{checklist}', [ChecklistController::class, 'update']);
+  Route::delete('/checklists/{checklist}', [ChecklistController::class, 'destroy']);
+
+  // Checklist Items
+  Route::post('/checklists/{checklist}/items', [ChecklistItemController::class, 'store']);
+  Route::patch('/checklist-items/{checklistItem:id}', [ChecklistItemController::class, 'update']);
+  Route::delete('/checklist-items/{checklistItem:id}', [ChecklistItemController::class, 'destroy']);
+
+  // Attachments
+  Route::get('/cards/{card}/attachments', [AttachmentController::class, 'index']);
+  Route::post('/cards/{card}/attachments', [AttachmentController::class, 'store']);
+  Route::delete('/attachments/{attachment}', [AttachmentController::class, 'destroy']);
 });
