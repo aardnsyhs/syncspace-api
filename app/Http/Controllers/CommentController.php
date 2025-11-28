@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentCreated;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Models\Card;
@@ -30,6 +31,11 @@ class CommentController extends Controller
       'body' => $request->body,
     ]);
 
+    $boardId = $card->column->board_id;
+
+    // Broadcast event
+    broadcast(new CommentCreated($comment, $boardId, $card->id))->toOthers();
+
     return response()->json([
       'data' => new CommentResource($comment->load('user')),
     ], 201);
@@ -41,7 +47,7 @@ class CommentController extends Controller
     if ($comment->user_id !== $request->user()->id) {
       $team = $comment->card->column->board->team;
       $role = $team->getMemberRole($request->user());
-      if (!in_array($role, ['owner', 'admin'])) {
+      if (!\in_array($role, ['owner', 'admin'])) {
         abort(403, 'You can only delete your own comments.');
       }
     }

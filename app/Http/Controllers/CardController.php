@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CardCreated;
+use App\Events\CardDeleted;
+use App\Events\CardMoved;
+use App\Events\CardUpdated;
 use App\Http\Requests\Card\MoveCardRequest;
 use App\Http\Requests\Card\StoreCardRequest;
 use App\Http\Requests\Card\UpdateCardRequest;
@@ -26,6 +30,11 @@ class CardController extends Controller
       'position' => $maxPosition + 1,
     ]);
 
+    $boardId = $column->board_id;
+
+    // Broadcast event
+    broadcast(new CardCreated($card, $boardId))->toOthers();
+
     return response()->json([
       'data' => new CardResource($card->load(['assignee', 'labels'])),
     ], 201);
@@ -48,6 +57,11 @@ class CardController extends Controller
 
     $card->update($request->validated());
 
+    $boardId = $card->column->board_id;
+
+    // Broadcast event
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
+
     return response()->json([
       'data' => new CardResource($card->load(['assignee', 'labels'])),
     ]);
@@ -58,6 +72,9 @@ class CardController extends Controller
     $this->authorizeCardAccess($request, $card);
 
     $column = $card->column;
+    $boardId = $column->board_id;
+    $columnId = $column->id;
+    $cardId = $card->id;
     $position = $card->position;
 
     $card->delete();
@@ -66,6 +83,9 @@ class CardController extends Controller
     $column->cards()
       ->where('position', '>', $position)
       ->decrement('position');
+
+    // Broadcast event
+    broadcast(new CardDeleted($boardId, $columnId, $cardId))->toOthers();
 
     return response()->json(null, 204);
   }
@@ -78,6 +98,7 @@ class CardController extends Controller
     $newPosition = $request->position;
     $oldColumnId = $card->column_id;
     $oldPosition = $card->position;
+    $boardId = $card->column->board_id;
 
     DB::transaction(function () use ($card, $newColumnId, $newPosition, $oldColumnId, $oldPosition) {
       if ($newColumnId === $oldColumnId) {
@@ -107,6 +128,15 @@ class CardController extends Controller
         'position' => $newPosition,
       ]);
     });
+
+    // Broadcast event
+    broadcast(new CardMoved(
+      $card->fresh(),
+      $boardId,
+      $oldColumnId,
+      $newColumnId,
+      $newPosition
+    ))->toOthers();
 
     return response()->json([
       'data' => new CardResource($card->fresh()->load(['assignee', 'labels'])),

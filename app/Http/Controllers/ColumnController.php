@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ColumnCreated;
+use App\Events\ColumnDeleted;
+use App\Events\ColumnUpdated;
 use App\Http\Requests\Column\MoveColumnRequest;
 use App\Http\Requests\Column\StoreColumnRequest;
 use App\Http\Requests\Column\UpdateColumnRequest;
@@ -26,6 +29,9 @@ class ColumnController extends Controller
       'position' => $maxPosition + 1,
     ]);
 
+    // Broadcast event
+    broadcast(new ColumnCreated($column))->toOthers();
+
     return response()->json([
       'data' => new ColumnResource($column),
     ], 201);
@@ -37,6 +43,9 @@ class ColumnController extends Controller
 
     $column->update($request->validated());
 
+    // Broadcast event
+    broadcast(new ColumnUpdated($column))->toOthers();
+
     return response()->json([
       'data' => new ColumnResource($column),
     ]);
@@ -46,12 +55,19 @@ class ColumnController extends Controller
   {
     $this->authorizeTeamAccess($request, $column->board);
 
+    $boardId = $column->board_id;
+    $columnId = $column->id;
+    $position = $column->position;
+
     $column->delete();
 
     // Reorder remaining columns
-    $column->board->columns()
-      ->where('position', '>', $column->position)
+    Column::where('board_id', $boardId)
+      ->where('position', '>', $position)
       ->decrement('position');
+
+    // Broadcast event
+    broadcast(new ColumnDeleted($boardId, $columnId))->toOthers();
 
     return response()->json(null, 204);
   }
@@ -82,6 +98,9 @@ class ColumnController extends Controller
 
       $column->update(['position' => $newPosition]);
     });
+
+    // Broadcast event
+    broadcast(new ColumnUpdated($column->fresh()))->toOthers();
 
     return response()->json([
       'data' => new ColumnResource($column->fresh()),

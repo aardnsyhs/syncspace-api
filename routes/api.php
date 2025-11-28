@@ -10,6 +10,7 @@ use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMemberController;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +40,11 @@ Route::middleware('auth:sanctum')->group(function () {
   // Auth
   Route::post('/logout', LogoutController::class);
   Route::get('/user', UserController::class);
+
+  // Broadcasting auth - manual route karena Broadcast::routes() tidak support prefix
+  Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {
+    return Broadcast::auth($request);
+  });
 
   // Teams
   Route::apiResource('teams', TeamController::class);

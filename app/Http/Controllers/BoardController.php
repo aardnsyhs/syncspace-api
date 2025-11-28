@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BoardUpdated;
 use App\Http\Requests\Board\StoreBoardRequest;
 use App\Http\Requests\Board\UpdateBoardRequest;
 use App\Http\Resources\BoardResource;
@@ -64,6 +65,9 @@ class BoardController extends Controller
 
     $board->update($request->validated());
 
+    // Broadcast board updated event
+    broadcast(new BoardUpdated($board))->toOthers();
+
     return response()->json([
       'data' => new BoardResource($board),
     ]);
@@ -88,7 +92,7 @@ class BoardController extends Controller
   private function authorizeTeamAdmin(Request $request, Team $team): void
   {
     $role = $team->getMemberRole($request->user());
-    if (!in_array($role, ['owner', 'admin'])) {
+    if (!\in_array($role, ['owner', 'admin'])) {
       abort(403, 'You do not have permission to delete this board.');
     }
   }
