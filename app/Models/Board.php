@@ -27,4 +27,9 @@ class Board extends Model
   {
     return $this->hasMany(Column::class)->orderBy('position');
   }
+
+  public function activities(): HasMany
+  {
+    return $this->hasMany(Activity::class)->orderByDesc('created_at');
+  }
 }

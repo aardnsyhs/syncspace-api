@@ -6,23 +6,29 @@ use App\Events\CardCreated;
 use App\Events\CardDeleted;
 use App\Events\CardMoved;
 use App\Events\CardUpdated;
+use App\Events\UserNotification;
 use App\Http\Requests\Card\MoveCardRequest;
 use App\Http\Requests\Card\StoreCardRequest;
 use App\Http\Requests\Card\UpdateCardRequest;
 use App\Http\Resources\CardResource;
 use App\Models\Card;
 use App\Models\Column;
+use App\Services\ActivityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CardController extends Controller
 {
+  public function __construct(
+    private ActivityService $activityService
+  ) {
+  }
+
   public function store(StoreCardRequest $request, Column $column): JsonResponse
   {
     $this->authorizeColumnAccess($request, $column);
 
-    // Get max position and add new card at the end
     $maxPosition = $column->cards()->max('position') ?? -1;
 
     $card = $column->cards()->create([
@@ -31,6 +37,9 @@ class CardController extends Controller
     ]);
 
     $boardId = $column->board_id;
+
+    // Log activity
+    $this->activityService->logCardCreated($card, $request->user());
 
     // Broadcast event
     broadcast(new CardCreated($card, $boardId))->toOthers();
@@ -55,9 +64,34 @@ class CardController extends Controller
   {
     $this->authorizeCardAccess($request, $card);
 
-    $card->update($request->validated());
+    $oldAssigneeId = $card->assignee_id;
+    $changes = $request->validated();
+
+    $card->update($changes);
 
     $boardId = $card->column->board_id;
+
+    // Log activity
+    $this->activityService->logCardUpdated($card, $request->user(), array_keys($changes));
+
+    // Check if assignee changed for notification
+    if (isset($changes['assignee_id']) && $changes['assignee_id'] !== $oldAssigneeId) {
+      $this->activityService->logCardAssigned($card, $request->user(), $card->assignee);
+
+      // Send notification to new assignee
+      if ($card->assignee_id && $card->assignee_id !== $request->user()->id) {
+        broadcast(new UserNotification(
+          userId: $card->assignee_id,
+          type: 'card_assigned',
+          title: 'You were assigned to a card',
+          message: "{$request->user()->name} assigned you to \"{$card->title}\"",
+          data: [
+            'card_id' => $card->id,
+            'board_id' => $boardId,
+          ]
+        ));
+      }
+    }
 
     // Broadcast event
     broadcast(new CardUpdated($card, $boardId))->toOthers();
@@ -72,9 +106,12 @@ class CardController extends Controller
     $this->authorizeCardAccess($request, $card);
 
     $column = $card->column;
-    $boardId = $column->board_id;
+    $board = $column->board;
+    $boardId = $board->id;
     $columnId = $column->id;
     $cardId = $card->id;
+    $cardTitle = $card->title;
+    $columnName = $column->name;
     $position = $card->position;
 
     $card->delete();
@@ -83,6 +120,9 @@ class CardController extends Controller
     $column->cards()
       ->where('position', '>', $position)
       ->decrement('position');
+
+    // Log activity
+    $this->activityService->logCardDeleted($board, $request->user(), $cardTitle, $columnName);
 
     // Broadcast event
     broadcast(new CardDeleted($boardId, $columnId, $cardId))->toOthers();
@@ -98,11 +138,11 @@ class CardController extends Controller
     $newPosition = $request->position;
     $oldColumnId = $card->column_id;
     $oldPosition = $card->position;
+    $oldColumnName = $card->column->name;
     $boardId = $card->column->board_id;
 
     DB::transaction(function () use ($card, $newColumnId, $newPosition, $oldColumnId, $oldPosition) {
       if ($newColumnId === $oldColumnId) {
-        // Same column: reorder within column
         if ($newPosition > $oldPosition) {
           Card::where('column_id', $oldColumnId)
             ->whereBetween('position', [$oldPosition + 1, $newPosition])
@@ -113,7 +153,6 @@ class CardController extends Controller
             ->increment('position');
         }
       } else {
-        // Different column: remove from old, insert to new
         Card::where('column_id', $oldColumnId)
           ->where('position', '>', $oldPosition)
           ->decrement('position');
@@ -129,9 +168,17 @@ class CardController extends Controller
       ]);
     });
 
+    $card->refresh();
+    $newColumnName = $card->column->name;
+
+    // Log activity if moved to different column
+    if ($newColumnId !== $oldColumnId) {
+      $this->activityService->logCardMoved($card, $request->user(), $oldColumnName, $newColumnName);
+    }
+
     // Broadcast event
     broadcast(new CardMoved(
-      $card->fresh(),
+      $card,
       $boardId,
       $oldColumnId,
       $newColumnId,
@@ -139,7 +186,7 @@ class CardController extends Controller
     ))->toOthers();
 
     return response()->json([
-      'data' => new CardResource($card->fresh()->load(['assignee', 'labels'])),
+      'data' => new CardResource($card->load(['assignee', 'labels'])),
     ]);
   }
 

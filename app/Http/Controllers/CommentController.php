@@ -3,16 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Events\CommentCreated;
+use App\Events\UserNotification;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Models\Card;
 use App\Models\Comment;
+use App\Services\ActivityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CommentController extends Controller
 {
+  public function __construct(
+    private ActivityService $activityService
+  ) {
+  }
+
   public function index(Request $request, Card $card): AnonymousResourceCollection
   {
     $this->authorizeCardAccess($request, $card);
@@ -33,8 +40,26 @@ class CommentController extends Controller
 
     $boardId = $card->column->board_id;
 
-    // Broadcast event
+    // Log activity
+    $this->activityService->logCommentCreated($comment, $request->user());
+
+    // Broadcast comment event to board
     broadcast(new CommentCreated($comment, $boardId, $card->id))->toOthers();
+
+    // Send notification to card creator if different from commenter
+    if ($card->assignee_id && $card->assignee_id !== $request->user()->id) {
+      broadcast(new UserNotification(
+        userId: $card->assignee_id,
+        type: 'comment_added',
+        title: 'New comment on your card',
+        message: "{$request->user()->name} commented on \"{$card->title}\"",
+        data: [
+          'card_id' => $card->id,
+          'board_id' => $boardId,
+          'comment_preview' => mb_substr($comment->body, 0, 50),
+        ]
+      ));
+    }
 
     return response()->json([
       'data' => new CommentResource($comment->load('user')),
@@ -43,7 +68,6 @@ class CommentController extends Controller
 
   public function destroy(Request $request, Comment $comment): JsonResponse
   {
-    // Only comment author or team admin can delete
     if ($comment->user_id !== $request->user()->id) {
       $team = $comment->card->column->board->team;
       $role = $team->getMemberRole($request->user());

@@ -8,18 +8,14 @@ use Illuminate\Support\Facades\Broadcast;
 |--------------------------------------------------------------------------
 | Broadcast Channels
 |--------------------------------------------------------------------------
-|
-| Here you may register all of the event broadcasting channels that your
-| application supports. The given channel authorization callbacks are
-| used to check if an authenticated user can listen to the channel.
-|
 */
 
-Broadcast::channel('App.Models.User.{id}', function (User $user, int $id) {
-  return $user->id === $id;
+// User private channel - for personal notifications
+Broadcast::channel('user.{userId}', function (User $user, int $userId) {
+  return $user->id === $userId;
 });
 
-// Board channel - only team members can subscribe
+// Board private channel - for board updates
 Broadcast::channel('board.{boardId}', function (User $user, int $boardId) {
   $board = Board::find($boardId);
 
@@ -27,6 +23,21 @@ Broadcast::channel('board.{boardId}', function (User $user, int $boardId) {
     return false;
   }
 
-  // Check if user is a member of the team that owns this board
   return $board->team->hasMember($user);
+});
+
+// Board presence channel - for online users
+Broadcast::channel('presence-board.{boardId}', function (User $user, int $boardId) {
+  $board = Board::find($boardId);
+
+  if (!$board || !$board->team->hasMember($user)) {
+    return false;
+  }
+
+  // Return user data for presence
+  return [
+    'id' => $user->id,
+    'name' => $user->name,
+    'avatar_url' => $user->avatar_url,
+  ];
 });

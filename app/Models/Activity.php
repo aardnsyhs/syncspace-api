@@ -13,6 +13,7 @@ class Activity extends Model
   public $timestamps = false;
 
   protected $fillable = [
+    'board_id',
     'card_id',
     'user_id',
     'type',
@@ -24,6 +25,11 @@ class Activity extends Model
     'data' => 'array',
     'created_at' => 'datetime',
   ];
+
+  public function board(): BelongsTo
+  {
+    return $this->belongsTo(Board::class);
+  }
 
   public function card(): BelongsTo
   {

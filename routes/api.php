@@ -8,6 +8,7 @@ use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMemberController;
 use Illuminate\Support\Facades\Broadcast;
@@ -60,6 +61,7 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/boards/{board}', [BoardController::class, 'show']);
   Route::put('/boards/{board}', [BoardController::class, 'update']);
   Route::delete('/boards/{board}', [BoardController::class, 'destroy']);
+  Route::get('/boards/{board}/activities', [ActivityController::class, 'index']);
 
   // Columns
   Route::post('/boards/{board}/columns', [ColumnController::class, 'store']);
