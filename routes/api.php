@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\BoardAnalyticsController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\CommentController;
@@ -63,6 +64,12 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::put('/boards/{board}', [BoardController::class, 'update']);
   Route::delete('/boards/{board}', [BoardController::class, 'destroy']);
   Route::get('/boards/{board}/activities', [ActivityController::class, 'index']);
+
+  // Board Analytics
+  Route::get('/boards/{board}/analytics/summary', [BoardAnalyticsController::class, 'summary']);
+  Route::get('/boards/{board}/analytics/throughput', [BoardAnalyticsController::class, 'throughput']);
+  Route::get('/boards/{board}/analytics/cumulative-flow', [BoardAnalyticsController::class, 'cumulativeFlow']);
+  Route::get('/boards/{board}/analytics/assignees', [BoardAnalyticsController::class, 'assignees']);
 
   // Columns
   Route::post('/boards/{board}/columns', [ColumnController::class, 'store']);

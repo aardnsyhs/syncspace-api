@@ -12,6 +12,7 @@ use App\Http\Requests\Card\StoreCardRequest;
 use App\Http\Requests\Card\UpdateCardRequest;
 use App\Http\Resources\CardResource;
 use App\Models\Card;
+use App\Models\CardTransition;
 use App\Models\Column;
 use App\Services\ActivityService;
 use Illuminate\Http\JsonResponse;
@@ -37,6 +38,15 @@ class CardController extends Controller
     ]);
 
     $boardId = $column->board_id;
+
+    // Record initial transition (card created in this column)
+    CardTransition::create([
+      'card_id' => $card->id,
+      'from_column_id' => null,
+      'to_column_id' => $column->id,
+      'user_id' => $request->user()->id,
+      'transitioned_at' => now(),
+    ]);
 
     $this->activityService->logCardCreated($card, $request->user());
     broadcast(new CardCreated($card, $boardId))->toOthers();
