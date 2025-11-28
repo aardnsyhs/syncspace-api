@@ -2,34 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TeamRole;
 use App\Http\Resources\UserResource;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Validation\Rule;
 
 class TeamMemberController extends Controller
 {
   public function index(Request $request, Team $team): AnonymousResourceCollection
   {
-    $this->authorizeTeamAccess($request, $team);
+    $this->authorize('view', $team);
 
     $members = $team->members()->get();
 
-    return UserResource::collection($members);
+    return UserResource::collection($members)->additional([
+      'meta' => [
+        'current_user_role' => $team->getMemberRole($request->user()),
+      ],
+    ]);
   }
 
   public function store(Request $request, Team $team): JsonResponse
   {
-    $this->authorizeTeamAdmin($request, $team);
+    $this->authorize('manageMembers', $team);
 
-    $request->validate([
+    $validated = $request->validate([
       'email' => ['required', 'email', 'exists:users,email'],
-      'role' => ['sometimes', 'in:admin,member'],
+      'role' => ['sometimes', Rule::in(['admin', 'member', 'viewer'])],
     ]);
 
-    $user = User::where('email', $request->email)->firstOrFail();
+    $user = User::where('email', $validated['email'])->firstOrFail();
 
     if ($team->hasMember($user)) {
       return response()->json([
@@ -37,8 +43,18 @@ class TeamMemberController extends Controller
       ], 422);
     }
 
+    // Only owner can add admins
+    $requestedRole = $validated['role'] ?? 'member';
+    $currentUserRole = TeamRole::tryFrom($team->getMemberRole($request->user()));
+
+    if ($requestedRole === 'admin' && $currentUserRole !== TeamRole::OWNER) {
+      return response()->json([
+        'message' => 'Only team owner can add admins.',
+      ], 403);
+    }
+
     $team->members()->attach($user->id, [
-      'role' => $request->input('role', 'member'),
+      'role' => $requestedRole,
     ]);
 
     return response()->json([
@@ -47,34 +63,97 @@ class TeamMemberController extends Controller
     ], 201);
   }
 
+  public function update(Request $request, Team $team, User $user): JsonResponse
+  {
+    $this->authorize('changeRoles', $team);
+
+    $validated = $request->validate([
+      'role' => ['required', Rule::in(TeamRole::values())],
+    ]);
+
+    $newRole = TeamRole::from($validated['role']);
+    $currentUserRole = TeamRole::tryFrom($team->getMemberRole($request->user()));
+    $targetUserRole = TeamRole::tryFrom($team->getMemberRole($user));
+
+    if (!$targetUserRole) {
+      return response()->json([
+        'message' => 'User is not a member of this team.',
+      ], 404);
+    }
+
+    // Cannot change own role
+    if ($user->id === $request->user()->id) {
+      return response()->json([
+        'message' => 'You cannot change your own role.',
+      ], 422);
+    }
+
+    // Only owner can promote to owner or demote from owner
+    if ($newRole === TeamRole::OWNER || $targetUserRole === TeamRole::OWNER) {
+      if ($currentUserRole !== TeamRole::OWNER) {
+        return response()->json([
+          'message' => 'Only team owner can transfer ownership.',
+        ], 403);
+      }
+
+      // Transfer ownership
+      if ($newRole === TeamRole::OWNER) {
+        // Demote current owner to admin
+        $team->members()->updateExistingPivot($request->user()->id, ['role' => 'admin']);
+        $team->update(['owner_id' => $user->id]);
+      }
+    }
+
+    // Admin cannot change other admin's role
+    if ($currentUserRole === TeamRole::ADMIN && $targetUserRole === TeamRole::ADMIN) {
+      return response()->json([
+        'message' => 'Admins cannot change other admin roles.',
+      ], 403);
+    }
+
+    $team->members()->updateExistingPivot($user->id, ['role' => $newRole->value]);
+
+    return response()->json([
+      'message' => 'Role updated successfully.',
+      'data' => new UserResource($user->fresh()),
+    ]);
+  }
+
   public function destroy(Request $request, Team $team, User $user): JsonResponse
   {
-    $this->authorizeTeamAdmin($request, $team);
+    $this->authorize('manageMembers', $team);
+
+    $currentUserRole = TeamRole::tryFrom($team->getMemberRole($request->user()));
+    $targetUserRole = TeamRole::tryFrom($team->getMemberRole($user));
+
+    if (!$targetUserRole) {
+      return response()->json([
+        'message' => 'User is not a member of this team.',
+      ], 404);
+    }
 
     // Cannot remove owner
-    if ($team->owner_id === $user->id) {
+    if ($targetUserRole === TeamRole::OWNER) {
       return response()->json([
-        'message' => 'Cannot remove team owner.',
+        'message' => 'Cannot remove team owner. Transfer ownership first.',
       ], 422);
+    }
+
+    // Admin cannot remove other admins
+    if ($currentUserRole === TeamRole::ADMIN && $targetUserRole === TeamRole::ADMIN) {
+      return response()->json([
+        'message' => 'Admins cannot remove other admins.',
+      ], 403);
+    }
+
+    // User can remove themselves (leave team)
+    if ($user->id === $request->user()->id) {
+      $team->members()->detach($user->id);
+      return response()->json(null, 204);
     }
 
     $team->members()->detach($user->id);
 
     return response()->json(null, 204);
-  }
-
-  private function authorizeTeamAccess(Request $request, Team $team): void
-  {
-    if (!$team->hasMember($request->user())) {
-      abort(403, 'You are not a member of this team.');
-    }
-  }
-
-  private function authorizeTeamAdmin(Request $request, Team $team): void
-  {
-    $role = $team->getMemberRole($request->user());
-    if (!in_array($role, ['owner', 'admin'])) {
-      abort(403, 'You do not have permission to manage team members.');
-    }
   }
 }

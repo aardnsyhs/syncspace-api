@@ -27,7 +27,7 @@ class CardController extends Controller
 
   public function store(StoreCardRequest $request, Column $column): JsonResponse
   {
-    $this->authorizeColumnAccess($request, $column);
+    $this->authorize('create', [Card::class, $column]);
 
     $maxPosition = $column->cards()->max('position') ?? -1;
 
@@ -38,10 +38,7 @@ class CardController extends Controller
 
     $boardId = $column->board_id;
 
-    // Log activity
     $this->activityService->logCardCreated($card, $request->user());
-
-    // Broadcast event
     broadcast(new CardCreated($card, $boardId))->toOthers();
 
     return response()->json([
@@ -51,7 +48,7 @@ class CardController extends Controller
 
   public function show(Request $request, Card $card): JsonResponse
   {
-    $this->authorizeCardAccess($request, $card);
+    $this->authorize('view', $card);
 
     $card->load(['assignee', 'labels', 'comments.user']);
 
@@ -62,7 +59,7 @@ class CardController extends Controller
 
   public function update(UpdateCardRequest $request, Card $card): JsonResponse
   {
-    $this->authorizeCardAccess($request, $card);
+    $this->authorize('update', $card);
 
     $oldAssigneeId = $card->assignee_id;
     $changes = $request->validated();
@@ -71,14 +68,11 @@ class CardController extends Controller
 
     $boardId = $card->column->board_id;
 
-    // Log activity
     $this->activityService->logCardUpdated($card, $request->user(), array_keys($changes));
 
-    // Check if assignee changed for notification
     if (isset($changes['assignee_id']) && $changes['assignee_id'] !== $oldAssigneeId) {
       $this->activityService->logCardAssigned($card, $request->user(), $card->assignee);
 
-      // Send notification to new assignee
       if ($card->assignee_id && $card->assignee_id !== $request->user()->id) {
         broadcast(new UserNotification(
           userId: $card->assignee_id,
@@ -93,7 +87,6 @@ class CardController extends Controller
       }
     }
 
-    // Broadcast event
     broadcast(new CardUpdated($card, $boardId))->toOthers();
 
     return response()->json([
@@ -103,7 +96,7 @@ class CardController extends Controller
 
   public function destroy(Request $request, Card $card): JsonResponse
   {
-    $this->authorizeCardAccess($request, $card);
+    $this->authorize('delete', $card);
 
     $column = $card->column;
     $board = $column->board;
@@ -116,15 +109,11 @@ class CardController extends Controller
 
     $card->delete();
 
-    // Reorder remaining cards
     $column->cards()
       ->where('position', '>', $position)
       ->decrement('position');
 
-    // Log activity
     $this->activityService->logCardDeleted($board, $request->user(), $cardTitle, $columnName);
-
-    // Broadcast event
     broadcast(new CardDeleted($boardId, $columnId, $cardId))->toOthers();
 
     return response()->json(null, 204);
@@ -132,7 +121,7 @@ class CardController extends Controller
 
   public function move(MoveCardRequest $request, Card $card): JsonResponse
   {
-    $this->authorizeCardAccess($request, $card);
+    $this->authorize('move', $card);
 
     $newColumnId = $request->column_id;
     $newPosition = $request->position;
@@ -171,12 +160,10 @@ class CardController extends Controller
     $card->refresh();
     $newColumnName = $card->column->name;
 
-    // Log activity if moved to different column
     if ($newColumnId !== $oldColumnId) {
       $this->activityService->logCardMoved($card, $request->user(), $oldColumnName, $newColumnName);
     }
 
-    // Broadcast event
     broadcast(new CardMoved(
       $card,
       $boardId,
@@ -188,19 +175,5 @@ class CardController extends Controller
     return response()->json([
       'data' => new CardResource($card->load(['assignee', 'labels'])),
     ]);
-  }
-
-  private function authorizeColumnAccess(Request $request, Column $column): void
-  {
-    if (!$column->board->team->hasMember($request->user())) {
-      abort(403, 'You are not a member of this team.');
-    }
-  }
-
-  private function authorizeCardAccess(Request $request, Card $card): void
-  {
-    if (!$card->column->board->team->hasMember($request->user())) {
-      abort(403, 'You are not a member of this team.');
-    }
   }
 }

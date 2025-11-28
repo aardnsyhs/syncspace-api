@@ -16,7 +16,7 @@ class BoardController extends Controller
 {
   public function index(Request $request, Team $team): AnonymousResourceCollection
   {
-    $this->authorizeTeamAccess($request, $team);
+    $this->authorize('viewAny', [Board::class, $team]);
 
     $boards = $team->boards()->latest()->get();
 
@@ -25,7 +25,7 @@ class BoardController extends Controller
 
   public function store(StoreBoardRequest $request, Team $team): JsonResponse
   {
-    $this->authorizeTeamAccess($request, $team);
+    $this->authorize('create', [Board::class, $team]);
 
     $board = $team->boards()->create($request->validated());
 
@@ -45,7 +45,7 @@ class BoardController extends Controller
 
   public function show(Request $request, Board $board): JsonResponse
   {
-    $this->authorizeTeamAccess($request, $board->team);
+    $this->authorize('view', $board);
 
     // Load full board state with columns, cards, and related data
     $board->load([
@@ -61,7 +61,7 @@ class BoardController extends Controller
 
   public function update(UpdateBoardRequest $request, Board $board): JsonResponse
   {
-    $this->authorizeTeamAccess($request, $board->team);
+    $this->authorize('update', $board);
 
     $board->update($request->validated());
 
@@ -75,25 +75,10 @@ class BoardController extends Controller
 
   public function destroy(Request $request, Board $board): JsonResponse
   {
-    $this->authorizeTeamAdmin($request, $board->team);
+    $this->authorize('delete', $board);
 
     $board->delete();
 
     return response()->json(null, 204);
-  }
-
-  private function authorizeTeamAccess(Request $request, Team $team): void
-  {
-    if (!$team->hasMember($request->user())) {
-      abort(403, 'You are not a member of this team.');
-    }
-  }
-
-  private function authorizeTeamAdmin(Request $request, Team $team): void
-  {
-    $role = $team->getMemberRole($request->user());
-    if (!\in_array($role, ['owner', 'admin'])) {
-      abort(403, 'You do not have permission to delete this board.');
-    }
   }
 }

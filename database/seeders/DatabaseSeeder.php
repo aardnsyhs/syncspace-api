@@ -15,28 +15,43 @@ class DatabaseSeeder extends Seeder
 {
   public function run(): void
   {
-    // Create demo user
-    $user = User::factory()->create([
-      'name' => 'John Doe',
-      'email' => 'john@example.com',
+    // Create demo users with different roles
+    $owner = User::factory()->create([
+      'name' => 'John Doe (Owner)',
+      'email' => 'owner@example.com',
       'password' => bcrypt('password'),
     ]);
 
-    // Create a team with the user as owner
+    $admin = User::factory()->create([
+      'name' => 'Jane Smith (Admin)',
+      'email' => 'admin@example.com',
+      'password' => bcrypt('password'),
+    ]);
+
+    $member = User::factory()->create([
+      'name' => 'Bob Wilson (Member)',
+      'email' => 'member@example.com',
+      'password' => bcrypt('password'),
+    ]);
+
+    $viewer = User::factory()->create([
+      'name' => 'Alice Brown (Viewer)',
+      'email' => 'viewer@example.com',
+      'password' => bcrypt('password'),
+    ]);
+
+    // Create a team
     $team = Team::factory()->create([
       'name' => 'Acme Corp',
       'slug' => 'acme-corp',
-      'owner_id' => $user->id,
+      'owner_id' => $owner->id,
     ]);
 
-    // Add user as team member with owner role
-    $team->members()->attach($user->id, ['role' => 'owner']);
-
-    // Create additional team members
-    $members = User::factory(3)->create();
-    foreach ($members as $member) {
-      $team->members()->attach($member->id, ['role' => 'member']);
-    }
+    // Add members with different roles
+    $team->members()->attach($owner->id, ['role' => 'owner']);
+    $team->members()->attach($admin->id, ['role' => 'admin']);
+    $team->members()->attach($member->id, ['role' => 'member']);
+    $team->members()->attach($viewer->id, ['role' => 'viewer']);
 
     // Create labels for the team
     $labels = collect([
@@ -62,13 +77,15 @@ class DatabaseSeeder extends Seeder
       'position' => $index,
     ]));
 
+    $allMembers = [$owner, $admin, $member, $viewer];
+
     // Create cards in each column
-    $columns->each(function ($column, $colIndex) use ($user, $members, $labels) {
+    $columns->each(function ($column, $colIndex) use ($allMembers, $labels) {
       $cardCount = match ($colIndex) {
-        0 => 4,  // To Do
-        1 => 2,  // In Progress
-        2 => 1,  // Review
-        3 => 3,  // Done
+        0 => 4,
+        1 => 2,
+        2 => 1,
+        3 => 3,
         default => 0,
       };
 
@@ -77,21 +94,19 @@ class DatabaseSeeder extends Seeder
           'column_id' => $column->id,
           'position' => $i,
           'assignee_id' => fake()->optional(0.7)->randomElement(
-            [$user->id, ...$members->pluck('id')->toArray()]
+            array_map(fn($u) => $u->id, $allMembers)
           ),
         ]);
 
-        // Attach random labels
         $card->labels()->attach(
           $labels->random(rand(0, 2))->pluck('id')
         );
 
-        // Add some comments
         if (fake()->boolean(60)) {
           Comment::factory(rand(1, 3))->create([
             'card_id' => $card->id,
             'user_id' => fake()->randomElement(
-              [$user->id, ...$members->pluck('id')->toArray()]
+              array_map(fn($u) => $u->id, $allMembers)
             ),
           ]);
         }
@@ -104,5 +119,16 @@ class DatabaseSeeder extends Seeder
       'name' => 'Marketing Campaign',
       'color' => '#10b981',
     ]);
+
+    $this->command->info('Demo users created:');
+    $this->command->table(
+      ['Email', 'Password', 'Role'],
+      [
+        ['owner@example.com', 'password', 'Owner'],
+        ['admin@example.com', 'password', 'Admin'],
+        ['member@example.com', 'password', 'Member'],
+        ['viewer@example.com', 'password', 'Viewer'],
+      ]
+    );
   }
 }

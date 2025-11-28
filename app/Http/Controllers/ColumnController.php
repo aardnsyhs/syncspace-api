@@ -25,7 +25,7 @@ class ColumnController extends Controller
 
   public function store(StoreColumnRequest $request, Board $board): JsonResponse
   {
-    $this->authorizeTeamAccess($request, $board);
+    $this->authorize('create', [Column::class, $board]);
 
     $maxPosition = $board->columns()->max('position') ?? -1;
 
@@ -34,10 +34,7 @@ class ColumnController extends Controller
       'position' => $maxPosition + 1,
     ]);
 
-    // Log activity
     $this->activityService->logColumnCreated($column, $request->user());
-
-    // Broadcast event
     broadcast(new ColumnCreated($column))->toOthers();
 
     return response()->json([
@@ -47,14 +44,11 @@ class ColumnController extends Controller
 
   public function update(UpdateColumnRequest $request, Column $column): JsonResponse
   {
-    $this->authorizeTeamAccess($request, $column->board);
+    $this->authorize('update', $column);
 
     $column->update($request->validated());
 
-    // Log activity
     $this->activityService->logColumnUpdated($column, $request->user());
-
-    // Broadcast event
     broadcast(new ColumnUpdated($column))->toOthers();
 
     return response()->json([
@@ -64,7 +58,7 @@ class ColumnController extends Controller
 
   public function destroy(Request $request, Column $column): JsonResponse
   {
-    $this->authorizeTeamAccess($request, $column->board);
+    $this->authorize('delete', $column);
 
     $board = $column->board;
     $boardId = $board->id;
@@ -74,15 +68,11 @@ class ColumnController extends Controller
 
     $column->delete();
 
-    // Reorder remaining columns
     Column::where('board_id', $boardId)
       ->where('position', '>', $position)
       ->decrement('position');
 
-    // Log activity
     $this->activityService->logColumnDeleted($board, $request->user(), $columnName);
-
-    // Broadcast event
     broadcast(new ColumnDeleted($boardId, $columnId))->toOthers();
 
     return response()->json(null, 204);
@@ -90,7 +80,7 @@ class ColumnController extends Controller
 
   public function move(MoveColumnRequest $request, Column $column): JsonResponse
   {
-    $this->authorizeTeamAccess($request, $column->board);
+    $this->authorize('move', $column);
 
     $newPosition = $request->position;
     $oldPosition = $column->position;
@@ -113,18 +103,10 @@ class ColumnController extends Controller
       $column->update(['position' => $newPosition]);
     });
 
-    // Broadcast event
     broadcast(new ColumnUpdated($column->fresh()))->toOthers();
 
     return response()->json([
       'data' => new ColumnResource($column->fresh()),
     ]);
-  }
-
-  private function authorizeTeamAccess(Request $request, Board $board): void
-  {
-    if (!$board->team->hasMember($request->user())) {
-      abort(403, 'You are not a member of this team.');
-    }
   }
 }

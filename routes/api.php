@@ -51,6 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::apiResource('teams', TeamController::class);
   Route::get('/teams/{team}/members', [TeamMemberController::class, 'index']);
   Route::post('/teams/{team}/members', [TeamMemberController::class, 'store']);
+  Route::patch('/teams/{team}/members/{user}', [TeamMemberController::class, 'update']);
   Route::delete('/teams/{team}/members/{user}', [TeamMemberController::class, 'destroy']);
 
   // Boards (nested under team for listing/creating)

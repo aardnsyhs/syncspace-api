@@ -41,7 +41,14 @@ class TeamController extends Controller
 
   public function show(Request $request, Team $team): JsonResponse
   {
-    $this->authorizeTeamAccess($request, $team);
+    $this->authorize('view', $team);
+
+    // Include user's role in response
+    $team->load([
+      'members' => function ($query) use ($request) {
+        $query->where('user_id', $request->user()->id);
+      }
+    ]);
 
     return response()->json([
       'data' => new TeamResource($team->loadCount(['members', 'boards'])),
@@ -50,7 +57,7 @@ class TeamController extends Controller
 
   public function update(UpdateTeamRequest $request, Team $team): JsonResponse
   {
-    $this->authorizeTeamAdmin($request, $team);
+    $this->authorize('update', $team);
 
     $team->update($request->validated());
 
@@ -61,28 +68,10 @@ class TeamController extends Controller
 
   public function destroy(Request $request, Team $team): JsonResponse
   {
-    // Only owner can delete team
-    if ($team->owner_id !== $request->user()->id) {
-      abort(403, 'Only team owner can delete the team.');
-    }
+    $this->authorize('delete', $team);
 
     $team->delete();
 
     return response()->json(null, 204);
-  }
-
-  private function authorizeTeamAccess(Request $request, Team $team): void
-  {
-    if (!$team->hasMember($request->user())) {
-      abort(403, 'You are not a member of this team.');
-    }
-  }
-
-  private function authorizeTeamAdmin(Request $request, Team $team): void
-  {
-    $role = $team->getMemberRole($request->user());
-    if (!in_array($role, ['owner', 'admin'])) {
-      abort(403, 'You do not have permission to manage this team.');
-    }
   }
 }

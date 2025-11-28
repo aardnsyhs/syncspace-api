@@ -22,7 +22,7 @@ class CommentController extends Controller
 
   public function index(Request $request, Card $card): AnonymousResourceCollection
   {
-    $this->authorizeCardAccess($request, $card);
+    $this->authorize('viewAny', [Comment::class, $card]);
 
     $comments = $card->comments()->with('user')->latest()->get();
 
@@ -31,7 +31,7 @@ class CommentController extends Controller
 
   public function store(StoreCommentRequest $request, Card $card): JsonResponse
   {
-    $this->authorizeCardAccess($request, $card);
+    $this->authorize('create', [Comment::class, $card]);
 
     $comment = $card->comments()->create([
       'user_id' => $request->user()->id,
@@ -40,13 +40,10 @@ class CommentController extends Controller
 
     $boardId = $card->column->board_id;
 
-    // Log activity
     $this->activityService->logCommentCreated($comment, $request->user());
-
-    // Broadcast comment event to board
     broadcast(new CommentCreated($comment, $boardId, $card->id))->toOthers();
 
-    // Send notification to card creator if different from commenter
+    // Notify card assignee
     if ($card->assignee_id && $card->assignee_id !== $request->user()->id) {
       broadcast(new UserNotification(
         userId: $card->assignee_id,
@@ -68,23 +65,10 @@ class CommentController extends Controller
 
   public function destroy(Request $request, Comment $comment): JsonResponse
   {
-    if ($comment->user_id !== $request->user()->id) {
-      $team = $comment->card->column->board->team;
-      $role = $team->getMemberRole($request->user());
-      if (!\in_array($role, ['owner', 'admin'])) {
-        abort(403, 'You can only delete your own comments.');
-      }
-    }
+    $this->authorize('delete', $comment);
 
     $comment->delete();
 
     return response()->json(null, 204);
-  }
-
-  private function authorizeCardAccess(Request $request, Card $card): void
-  {
-    if (!$card->column->board->team->hasMember($request->user())) {
-      abort(403, 'You are not a member of this team.');
-    }
   }
 }
