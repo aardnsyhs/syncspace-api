@@ -20,4 +20,8 @@ enum ActivityType: string
   case CHECKLIST_ITEM_UNCOMPLETED = 'checklist_item_uncompleted';
   case ATTACHMENT_ADDED = 'attachment_added';
   case ATTACHMENT_REMOVED = 'attachment_removed';
+  case BOARD_CREATED_FROM_TEMPLATE = 'board_created_from_template';
+  case BOARD_SAVED_AS_TEMPLATE = 'board_saved_as_template';
+  case PUBLIC_SHARING_ENABLED = 'public_sharing_enabled';
+  case PUBLIC_SHARING_DISABLED = 'public_sharing_disabled';
 }

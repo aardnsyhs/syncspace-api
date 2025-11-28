@@ -8,6 +8,8 @@ use App\Http\Controllers\BoardController;
 use App\Http\Controllers\BoardAnalyticsController;
 use App\Http\Controllers\BoardCardController;
 use App\Http\Controllers\BoardLabelController;
+use App\Http\Controllers\BoardTemplateController;
+use App\Http\Controllers\PublicBoardController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardLabelController;
 use App\Http\Controllers\ColumnController;
@@ -28,6 +30,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/health', fn() => response()->json(['status' => 'ok']));
+
+// Public board view (no auth required)
+Route::get('/public/boards/{token}', [PublicBoardController::class, 'show']);
 
 /*
 |--------------------------------------------------------------------------
@@ -124,4 +129,16 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/cards/{card}/attachments', [AttachmentController::class, 'index']);
   Route::post('/cards/{card}/attachments', [AttachmentController::class, 'store']);
   Route::delete('/attachments/{attachment}', [AttachmentController::class, 'destroy']);
+
+  // Board Templates
+  Route::get('/board-templates', [BoardTemplateController::class, 'index']);
+  Route::get('/board-templates/{template}', [BoardTemplateController::class, 'show']);
+  Route::post('/teams/{team}/board-templates', [BoardTemplateController::class, 'store']);
+  Route::delete('/board-templates/{template}', [BoardTemplateController::class, 'destroy']);
+  Route::post('/teams/{team}/boards/from-template', [BoardTemplateController::class, 'createBoardFromTemplate']);
+
+  // Public Sharing
+  Route::post('/boards/{board}/public/enable', [PublicBoardController::class, 'enable']);
+  Route::post('/boards/{board}/public/disable', [PublicBoardController::class, 'disable']);
+  Route::post('/boards/{board}/public/regenerate', [PublicBoardController::class, 'regenerate']);
 });
