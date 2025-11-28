@@ -15,10 +15,12 @@ class Column extends Model
     'board_id',
     'name',
     'position',
+    'wip_limit',
   ];
 
   protected $casts = [
     'position' => 'integer',
+    'wip_limit' => 'integer',
   ];
 
   public function board(): BelongsTo
@@ -29,5 +31,45 @@ class Column extends Model
   public function cards(): HasMany
   {
     return $this->hasMany(Card::class)->orderBy('position');
+  }
+
+  /**
+   * Check if WIP limit is exceeded
+   */
+  public function isWipExceeded(): bool
+  {
+    if ($this->wip_limit === null) {
+      return false;
+    }
+
+    return $this->cards()->count() > $this->wip_limit;
+  }
+
+  /**
+   * Check if adding one more card would exceed WIP limit
+   */
+  public function wouldExceedWip(): bool
+  {
+    if ($this->wip_limit === null) {
+      return false;
+    }
+
+    return $this->cards()->count() >= $this->wip_limit;
+  }
+
+  /**
+   * Get WIP status info
+   */
+  public function getWipStatusAttribute(): array
+  {
+    $count = $this->cards()->count();
+    $limit = $this->wip_limit;
+
+    return [
+      'count' => $count,
+      'limit' => $limit,
+      'exceeded' => $limit !== null && $count > $limit,
+      'at_limit' => $limit !== null && $count === $limit,
+    ];
   }
 }

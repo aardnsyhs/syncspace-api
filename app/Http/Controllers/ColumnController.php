@@ -109,4 +109,25 @@ class ColumnController extends Controller
       'data' => new ColumnResource($column->fresh()),
     ]);
   }
+
+  /**
+   * PATCH /columns/{column}/wip-limit
+   * Set WIP limit for a column (only OWNER/ADMIN)
+   */
+  public function updateWipLimit(Request $request, Column $column): JsonResponse
+  {
+    $this->authorize('update', $column);
+
+    $validated = $request->validate([
+      'wip_limit' => 'nullable|integer|min:1|max:100',
+    ]);
+
+    $column->update(['wip_limit' => $validated['wip_limit']]);
+
+    broadcast(new ColumnUpdated($column))->toOthers();
+
+    return response()->json([
+      'data' => new ColumnResource($column),
+    ]);
+  }
 }

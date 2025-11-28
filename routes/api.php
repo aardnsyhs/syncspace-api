@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\BoardAnalyticsController;
+use App\Http\Controllers\BoardCardController;
 use App\Http\Controllers\BoardLabelController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardLabelController;
@@ -81,6 +82,10 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::put('/columns/{column}', [ColumnController::class, 'update']);
   Route::delete('/columns/{column}', [ColumnController::class, 'destroy']);
   Route::put('/columns/{column}/move', [ColumnController::class, 'move']);
+  Route::patch('/columns/{column}/wip-limit', [ColumnController::class, 'updateWipLimit']);
+
+  // Board Cards (filtered)
+  Route::get('/boards/{board}/cards', [BoardCardController::class, 'index']);
 
   // Cards
   Route::post('/columns/{column}/cards', [CardController::class, 'store']);

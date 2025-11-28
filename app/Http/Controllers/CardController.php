@@ -140,6 +140,17 @@ class CardController extends Controller
     $oldColumnName = $card->column->name;
     $boardId = $card->column->board_id;
 
+    // Check WIP limit for target column (if moving to different column)
+    $wipExceeded = false;
+    $newColumn = null;
+    if ($newColumnId !== $oldColumnId) {
+      $newColumn = Column::find($newColumnId);
+      if ($newColumn && $newColumn->wouldExceedWip()) {
+        $wipExceeded = true;
+        // We allow the move but flag it (warning approach)
+      }
+    }
+
     DB::transaction(function () use ($card, $newColumnId, $newPosition, $oldColumnId, $oldPosition) {
       if ($newColumnId === $oldColumnId) {
         if ($newPosition > $oldPosition) {
@@ -167,6 +178,17 @@ class CardController extends Controller
       ]);
     });
 
+    // Record transition for analytics
+    if ($newColumnId !== $oldColumnId) {
+      CardTransition::create([
+        'card_id' => $card->id,
+        'from_column_id' => $oldColumnId,
+        'to_column_id' => $newColumnId,
+        'user_id' => $request->user()->id,
+        'transitioned_at' => now(),
+      ]);
+    }
+
     $card->refresh();
     $newColumnName = $card->column->name;
 
@@ -182,8 +204,20 @@ class CardController extends Controller
       $newPosition
     ))->toOthers();
 
-    return response()->json([
+    $response = [
       'data' => new CardResource($card->load(['assignee', 'labels'])),
-    ]);
+    ];
+
+    // Add WIP warning if exceeded
+    if ($wipExceeded && $newColumn) {
+      $response['wip_warning'] = [
+        'exceeded' => true,
+        'column_name' => $newColumn->name,
+        'limit' => $newColumn->wip_limit,
+        'count' => $newColumn->cards()->count(),
+      ];
+    }
+
+    return response()->json($response);
   }
 }
