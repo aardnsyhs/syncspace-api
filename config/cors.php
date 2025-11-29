@@ -29,6 +29,7 @@ return [
     'Content-Type',
     'X-Requested-With',
     'X-XSRF-TOKEN',
+    'X-Socket-ID',
   ],
 
   'exposed_headers' => [],
