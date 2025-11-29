@@ -17,6 +17,7 @@ class TeamController extends Controller
   {
     $teams = $request->user()
       ->teams()
+      ->with('boards:id,team_id,name,color')
       ->withCount(['members', 'boards'])
       ->get();
 

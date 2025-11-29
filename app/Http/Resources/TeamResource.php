@@ -17,6 +17,11 @@ class TeamResource extends JsonResource
       'role' => $this->whenPivotLoaded('team_user', fn() => $this->pivot->role),
       'members_count' => $this->whenCounted('members'),
       'boards_count' => $this->whenCounted('boards'),
+      'boards' => $this->whenLoaded('boards', fn() => $this->boards->map(fn($board) => [
+        'id' => $board->id,
+        'name' => $board->name,
+        'color' => $board->color,
+      ])),
       'created_at' => $this->created_at->toISOString(),
     ];
   }
