@@ -128,4 +128,23 @@ class NotificationService
       ],
     ]);
   }
+
+  /**
+   * Create a generic notification
+   */
+  public function create(
+    int $userId,
+    string $type,
+    string $title,
+    string $message,
+    array $data = []
+  ): Notification {
+    return Notification::create([
+      'user_id' => $userId,
+      'type' => $type,
+      'title' => $title,
+      'message' => $message,
+      'data' => $data,
+    ]);
+  }
 }
