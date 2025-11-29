@@ -20,6 +20,7 @@ use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMemberController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
@@ -77,6 +78,11 @@ Route::middleware('auth:sanctum')->group(function () {
   // Auth
   Route::post('/logout', LogoutController::class);
   Route::get('/user', UserController::class);
+
+  // Dashboard
+  Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
+  Route::get('/dashboard/activities', [DashboardController::class, 'activities']);
+  Route::get('/dashboard/my-cards', [DashboardController::class, 'myCards']);
 
   // Broadcasting auth - manual route karena Broadcast::routes() tidak support prefix
   Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {
