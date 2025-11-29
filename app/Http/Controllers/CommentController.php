@@ -9,6 +9,7 @@ use App\Http\Resources\CommentResource;
 use App\Models\Card;
 use App\Models\Comment;
 use App\Services\ActivityService;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -16,7 +17,8 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class CommentController extends Controller
 {
   public function __construct(
-    private ActivityService $activityService
+    private ActivityService $activityService,
+    private NotificationService $notificationService
   ) {
   }
 
@@ -43,7 +45,11 @@ class CommentController extends Controller
     $this->activityService->logCommentCreated($comment, $request->user());
     broadcast(new CommentCreated($comment, $boardId, $card->id))->toOthers();
 
-    // Notify card assignee
+    // Save notification to database and broadcast
+    $commentPreview = mb_substr($comment->body, 0, 50);
+    $this->notificationService->notifyNewComment($card, $request->user(), $commentPreview);
+
+    // Notify card assignee via real-time
     if ($card->assignee_id && $card->assignee_id !== $request->user()->id) {
       broadcast(new UserNotification(
         userId: $card->assignee_id,
@@ -53,7 +59,7 @@ class CommentController extends Controller
         data: [
           'card_id' => $card->id,
           'board_id' => $boardId,
-          'comment_preview' => mb_substr($comment->body, 0, 50),
+          'comment_preview' => $commentPreview,
         ]
       ));
     }

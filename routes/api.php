@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\BoardController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
@@ -79,10 +81,21 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::post('/logout', LogoutController::class);
   Route::get('/user', UserController::class);
 
+  // Profile
+  Route::put('/user/profile', [ProfileController::class, 'update']);
+  Route::put('/user/password', [ProfileController::class, 'updatePassword']);
+
   // Dashboard
   Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
   Route::get('/dashboard/activities', [DashboardController::class, 'activities']);
   Route::get('/dashboard/my-cards', [DashboardController::class, 'myCards']);
+
+  // Notifications
+  Route::get('/notifications', [NotificationController::class, 'index']);
+  Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead']);
+  Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+  Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);
+  Route::delete('/notifications', [NotificationController::class, 'clearAll']);
 
   // Broadcasting auth - manual route karena Broadcast::routes() tidak support prefix
   Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {

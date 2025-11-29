@@ -15,6 +15,7 @@ use App\Models\Card;
 use App\Models\CardTransition;
 use App\Models\Column;
 use App\Services\ActivityService;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,8 @@ use Illuminate\Support\Facades\DB;
 class CardController extends Controller
 {
   public function __construct(
-    private ActivityService $activityService
+    private ActivityService $activityService,
+    private NotificationService $notificationService
   ) {
   }
 
@@ -84,6 +86,10 @@ class CardController extends Controller
       $this->activityService->logCardAssigned($card, $request->user(), $card->assignee);
 
       if ($card->assignee_id && $card->assignee_id !== $request->user()->id) {
+        // Save notification to database
+        $this->notificationService->notifyCardAssigned($card, $card->assignee, $request->user());
+
+        // Broadcast real-time notification
         broadcast(new UserNotification(
           userId: $card->assignee_id,
           type: 'card_assigned',
@@ -194,6 +200,9 @@ class CardController extends Controller
 
     if ($newColumnId !== $oldColumnId) {
       $this->activityService->logCardMoved($card, $request->user(), $oldColumnName, $newColumnName);
+
+      // Notify assignee about card move
+      $this->notificationService->notifyCardMoved($card, $oldColumnName, $newColumnName, $request->user());
     }
 
     broadcast(new CardMoved(
