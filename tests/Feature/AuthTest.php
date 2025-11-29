@@ -5,9 +5,9 @@ use App\Models\User;
 test('user can register', function () {
   $response = $this->postJson('/api/register', [
     'name' => 'Test User',
-    'email' => 'test@example.com',
-    'password' => 'password123',
-    'password_confirmation' => 'password123',
+    'email' => 'testuser@example.com',
+    'password' => 'Password123',
+    'password_confirmation' => 'Password123',
   ]);
 
   $response->assertStatus(201)
@@ -17,7 +17,7 @@ test('user can register', function () {
     ]);
 
   $this->assertDatabaseHas('users', [
-    'email' => 'test@example.com',
+    'email' => 'testuser@example.com',
   ]);
 });
 

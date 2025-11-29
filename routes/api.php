@@ -31,17 +31,41 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/health', fn() => response()->json(['status' => 'ok']));
 
-// Public board view (no auth required)
-Route::get('/public/boards/{token}', [PublicBoardController::class, 'show']);
+// Health check with DB connection test
+Route::get('/health/app', function () {
+  try {
+    \Illuminate\Support\Facades\DB::connection()->getPdo();
+    return response()->json([
+      'status' => 'ok',
+      'database' => 'connected',
+      'timestamp' => now()->toIso8601String(),
+    ]);
+  } catch (\Exception $e) {
+    return response()->json([
+      'status' => 'error',
+      'database' => 'disconnected',
+      'timestamp' => now()->toIso8601String(),
+    ], 503);
+  }
+});
+
+// Public board view (no auth required) - rate limited
+Route::middleware('throttle:public-board')
+  ->get('/public/boards/{token}', [PublicBoardController::class, 'show']);
 
 /*
 |--------------------------------------------------------------------------
-| Auth Routes (Guest)
+| Auth Routes (Guest) - Rate Limited
 |--------------------------------------------------------------------------
 */
 
-Route::post('/register', RegisterController::class);
-Route::post('/login', LoginController::class);
+Route::middleware('throttle:auth')->group(function () {
+  Route::post('/login', LoginController::class);
+});
+
+Route::middleware('throttle:register')->group(function () {
+  Route::post('/register', RegisterController::class);
+});
 
 /*
 |--------------------------------------------------------------------------

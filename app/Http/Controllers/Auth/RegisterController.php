@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -17,6 +19,16 @@ class RegisterController extends Controller
       'email' => $request->email,
       'password' => $request->password, // auto-hashed via cast
     ]);
+
+    // Create a personal team for the new user
+    $team = Team::create([
+      'name' => $user->name . "'s Team",
+      'slug' => Str::slug($user->name) . '-' . Str::random(6),
+      'owner_id' => $user->id,
+    ]);
+
+    // Add user as owner of the team
+    $team->members()->attach($user->id, ['role' => 'owner']);
 
     $token = $user->createToken('auth-token')->plainTextToken;
 
