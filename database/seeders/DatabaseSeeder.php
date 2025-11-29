@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
 {
   public function run(): void
   {
-    // Create demo users with different roles
+    // Create demo users (UserObserver auto-creates personal teams)
     $owner = User::factory()->create([
       'name' => 'John Doe (Owner)',
       'email' => 'owner@example.com',
@@ -40,26 +40,18 @@ class DatabaseSeeder extends Seeder
       'password' => bcrypt('password'),
     ]);
 
-    // Create a team
+    // Create a shared team (separate from personal teams)
     $team = Team::factory()->create([
       'name' => 'Acme Corp',
       'slug' => 'acme-corp',
       'owner_id' => $owner->id,
     ]);
 
-    // Add members with different roles
+    // Add members with different roles to shared team
     $team->members()->attach($owner->id, ['role' => 'owner']);
     $team->members()->attach($admin->id, ['role' => 'admin']);
     $team->members()->attach($member->id, ['role' => 'member']);
     $team->members()->attach($viewer->id, ['role' => 'viewer']);
-
-    // Create labels for the team
-    $labels = collect([
-      ['name' => 'Bug', 'color' => '#ef4444'],
-      ['name' => 'Feature', 'color' => '#3b82f6'],
-      ['name' => 'Enhancement', 'color' => '#8b5cf6'],
-      ['name' => 'Urgent', 'color' => '#f97316'],
-    ])->map(fn($label) => Label::create([...$label, 'team_id' => $team->id]));
 
     // Create a board
     $board = Board::factory()->create([
@@ -68,6 +60,14 @@ class DatabaseSeeder extends Seeder
       'description' => 'Main project board for tracking tasks',
       'color' => '#3b82f6',
     ]);
+
+    // Create labels for the board (labels are now board-scoped)
+    $labels = collect([
+      ['name' => 'Bug', 'color' => '#ef4444'],
+      ['name' => 'Feature', 'color' => '#3b82f6'],
+      ['name' => 'Enhancement', 'color' => '#8b5cf6'],
+      ['name' => 'Urgent', 'color' => '#f97316'],
+    ])->map(fn($label) => Label::create([...$label, 'board_id' => $board->id]));
 
     // Create columns
     $columnNames = ['To Do', 'In Progress', 'Review', 'Done'];
