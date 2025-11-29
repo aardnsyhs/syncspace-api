@@ -41,9 +41,16 @@ class ChecklistItemController extends Controller
   /**
    * PATCH /checklist-items/{item}
    */
-  public function update(Request $request, ChecklistItem $item): JsonResponse
+  public function update(Request $request, ChecklistItem $checklistItem): JsonResponse
   {
-    $checklist = $item->checklist;
+    // Eager load relationships to avoid null issues
+    $checklistItem->load('checklist.card.column.board');
+
+    $checklist = $checklistItem->checklist;
+    if (!$checklist || !$checklist->card) {
+      return response()->json(['message' => 'Checklist or card not found'], 404);
+    }
+
     $card = $checklist->card;
     $board = $card->column->board;
     $this->authorize('editContent', $board);
@@ -54,35 +61,41 @@ class ChecklistItemController extends Controller
       'position' => 'sometimes|integer|min:0',
     ]);
 
-    $wasCompleted = $item->is_completed;
+    $wasCompleted = $checklistItem->is_completed;
 
     // Handle completion status change
     if (isset($validated['is_completed'])) {
       if ($validated['is_completed'] && !$wasCompleted) {
         $validated['completed_at'] = now();
         // Log completion activity
-        $this->activityService->logChecklistItemCompleted($card, $request->user(), $checklist, $item);
+        $this->activityService->logChecklistItemCompleted($card, $request->user(), $checklist, $checklistItem);
       } elseif (!$validated['is_completed'] && $wasCompleted) {
         $validated['completed_at'] = null;
         // Log uncomplete activity
-        $this->activityService->logChecklistItemUncompleted($card, $request->user(), $checklist, $item);
+        $this->activityService->logChecklistItemUncompleted($card, $request->user(), $checklist, $checklistItem);
       }
     }
 
-    $item->update($validated);
+    $checklistItem->update($validated);
 
-    return response()->json(['data' => $item]);
+    return response()->json(['data' => $checklistItem]);
   }
 
   /**
    * DELETE /checklist-items/{item}
    */
-  public function destroy(ChecklistItem $item): JsonResponse
+  public function destroy(ChecklistItem $checklistItem): JsonResponse
   {
-    $board = $item->checklist->card->column->board;
+    $checklistItem->load('checklist.card.column.board');
+
+    if (!$checklistItem->checklist || !$checklistItem->checklist->card) {
+      return response()->json(['message' => 'Checklist or card not found'], 404);
+    }
+
+    $board = $checklistItem->checklist->card->column->board;
     $this->authorize('editContent', $board);
 
-    $item->delete();
+    $checklistItem->delete();
 
     return response()->json(null, 204);
   }
