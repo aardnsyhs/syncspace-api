@@ -6,11 +6,11 @@ use App\Http\Resources\ActivityResource;
 use App\Models\Activity;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ActivityCreated implements ShouldBroadcast
+class ActivityCreated implements ShouldBroadcastNow
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 

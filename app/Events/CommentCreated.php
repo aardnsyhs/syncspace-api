@@ -6,11 +6,11 @@ use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CommentCreated implements ShouldBroadcast
+class CommentCreated implements ShouldBroadcastNow
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
