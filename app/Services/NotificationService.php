@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\UserNotification;
 use App\Models\Card;
 use App\Models\Notification;
 use App\Models\User;
@@ -17,17 +18,28 @@ class NotificationService
       return; // Don't notify if user assigned themselves
     }
 
+    $data = [
+      'card_id' => $card->id,
+      'board_id' => $card->column->board_id,
+      'assigner_id' => $assigner->id,
+    ];
+
     Notification::create([
       'user_id' => $assignee->id,
       'type' => 'card_assigned',
       'title' => 'Card Assigned',
       'message' => "{$assigner->name} assigned you to '{$card->title}'",
-      'data' => [
-        'card_id' => $card->id,
-        'board_id' => $card->column->board_id,
-        'assigner_id' => $assigner->id,
-      ],
+      'data' => $data,
     ]);
+
+    // Broadcast real-time notification
+    broadcast(new UserNotification(
+      userId: $assignee->id,
+      type: 'card_assigned',
+      title: 'Card Assigned',
+      message: "{$assigner->name} assigned you to '{$card->title}'",
+      data: $data
+    ));
   }
 
   /**
@@ -48,17 +60,28 @@ class NotificationService
     }
 
     $usersToNotify->unique()->each(function ($userId) use ($card, $commenter, $commentPreview) {
+      $data = [
+        'card_id' => $card->id,
+        'board_id' => $card->column->board_id,
+        'commenter_id' => $commenter->id,
+      ];
+
       Notification::create([
         'user_id' => $userId,
         'type' => 'comment',
         'title' => 'New Comment',
         'message' => "{$commenter->name} commented on '{$card->title}': {$commentPreview}",
-        'data' => [
-          'card_id' => $card->id,
-          'board_id' => $card->column->board_id,
-          'commenter_id' => $commenter->id,
-        ],
+        'data' => $data,
       ]);
+
+      // Broadcast real-time notification
+      broadcast(new UserNotification(
+        userId: $userId,
+        type: 'comment',
+        title: 'New Comment',
+        message: "{$commenter->name} commented on '{$card->title}': {$commentPreview}",
+        data: $data
+      ));
     });
   }
 
@@ -93,18 +116,29 @@ class NotificationService
       return;
     }
 
+    $data = [
+      'card_id' => $card->id,
+      'board_id' => $card->column->board_id,
+      'from_column' => $fromColumn,
+      'to_column' => $toColumn,
+    ];
+
     Notification::create([
       'user_id' => $card->assignee_id,
       'type' => 'card_moved',
       'title' => 'Card Moved',
       'message' => "{$mover->name} moved '{$card->title}' from {$fromColumn} to {$toColumn}",
-      'data' => [
-        'card_id' => $card->id,
-        'board_id' => $card->column->board_id,
-        'from_column' => $fromColumn,
-        'to_column' => $toColumn,
-      ],
+      'data' => $data,
     ]);
+
+    // Broadcast real-time notification
+    broadcast(new UserNotification(
+      userId: $card->assignee_id,
+      type: 'card_moved',
+      title: 'Card Moved',
+      message: "{$mover->name} moved '{$card->title}' from {$fromColumn} to {$toColumn}",
+      data: $data
+    ));
   }
 
   /**
@@ -116,17 +150,28 @@ class NotificationService
       return;
     }
 
+    $data = [
+      'card_id' => $card->id,
+      'board_id' => $card->column->board_id,
+      'mentioner_id' => $mentioner->id,
+    ];
+
     Notification::create([
       'user_id' => $mentionedUser->id,
       'type' => 'mention',
       'title' => 'You were mentioned',
       'message' => "{$mentioner->name} mentioned you in '{$card->title}'",
-      'data' => [
-        'card_id' => $card->id,
-        'board_id' => $card->column->board_id,
-        'mentioner_id' => $mentioner->id,
-      ],
+      'data' => $data,
     ]);
+
+    // Broadcast real-time notification
+    broadcast(new UserNotification(
+      userId: $mentionedUser->id,
+      type: 'mention',
+      title: 'You were mentioned',
+      message: "{$mentioner->name} mentioned you in '{$card->title}'",
+      data: $data
+    ));
   }
 
   /**
