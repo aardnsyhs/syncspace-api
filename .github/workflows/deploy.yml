@@ -24,7 +24,7 @@ jobs:
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd ~/syncspace-stack/backend
-            git pull origin main     # tarik perubahan dari repo syncspace-api
+            git pull origin main
             cd ~/syncspace-stack
             docker compose up -d --build backend
           EOF
