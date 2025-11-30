@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
@@ -26,6 +27,37 @@ class ProfileController extends Controller
 
     return response()->json([
       'message' => 'Profile updated successfully.',
+      'data' => new UserResource($user->fresh()),
+    ]);
+  }
+
+  /**
+   * Upload user avatar
+   */
+  public function uploadAvatar(Request $request): JsonResponse
+  {
+    $request->validate([
+      'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+    ]);
+
+    $user = $request->user();
+
+    // Delete old avatar if exists
+    if ($user->avatar_url) {
+      $oldPath = str_replace('/storage/', '', parse_url($user->avatar_url, PHP_URL_PATH));
+      if ($oldPath && Storage::disk('public')->exists($oldPath)) {
+        Storage::disk('public')->delete($oldPath);
+      }
+    }
+
+    // Store new avatar
+    $path = $request->file('avatar')->store('avatars', 'public');
+    $avatarUrl = Storage::disk('public')->url($path);
+
+    $user->update(['avatar_url' => $avatarUrl]);
+
+    return response()->json([
+      'message' => 'Avatar uploaded successfully.',
       'data' => new UserResource($user->fresh()),
     ]);
   }
