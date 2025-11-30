@@ -306,10 +306,8 @@ class ActivityService
       'created_at' => now(),
     ]);
 
-    // Load relations for broadcast
     $activity->load('user');
 
-    // Broadcast activity created event
     broadcast(new ActivityCreated($activity))->toOthers();
 
     return $activity;

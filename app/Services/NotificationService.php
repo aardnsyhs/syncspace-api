@@ -9,13 +9,11 @@ use App\Models\User;
 
 class NotificationService
 {
-  /**
-   * Notify user when assigned to a card
-   */
+
   public function notifyCardAssigned(Card $card, User $assignee, User $assigner): void
   {
     if ($assignee->id === $assigner->id) {
-      return; // Don't notify if user assigned themselves
+      return; 
     }
 
     $data = [
@@ -32,7 +30,6 @@ class NotificationService
       'data' => $data,
     ]);
 
-    // Broadcast real-time notification
     broadcast(new UserNotification(
       userId: $assignee->id,
       type: 'card_assigned',
@@ -42,19 +39,14 @@ class NotificationService
     ));
   }
 
-  /**
-   * Notify card owner/assignee about new comment
-   */
   public function notifyNewComment(Card $card, User $commenter, string $commentPreview): void
   {
     $usersToNotify = collect();
 
-    // Notify card assignee
     if ($card->assignee_id && $card->assignee_id !== $commenter->id) {
       $usersToNotify->push($card->assignee_id);
     }
 
-    // Notify card creator if different
     if ($card->created_by && $card->created_by !== $commenter->id) {
       $usersToNotify->push($card->created_by);
     }
@@ -74,7 +66,6 @@ class NotificationService
         'data' => $data,
       ]);
 
-      // Broadcast real-time notification
       broadcast(new UserNotification(
         userId: $userId,
         type: 'comment',
@@ -85,9 +76,6 @@ class NotificationService
     });
   }
 
-  /**
-   * Notify user about card due soon
-   */
   public function notifyDueSoon(Card $card): void
   {
     if (!$card->assignee_id) {
@@ -107,9 +95,6 @@ class NotificationService
     ]);
   }
 
-  /**
-   * Notify about card moved to different column
-   */
   public function notifyCardMoved(Card $card, string $fromColumn, string $toColumn, User $mover): void
   {
     if (!$card->assignee_id || $card->assignee_id === $mover->id) {
@@ -131,7 +116,6 @@ class NotificationService
       'data' => $data,
     ]);
 
-    // Broadcast real-time notification
     broadcast(new UserNotification(
       userId: $card->assignee_id,
       type: 'card_moved',
@@ -141,9 +125,6 @@ class NotificationService
     ));
   }
 
-  /**
-   * Notify user about mention in comment
-   */
   public function notifyMention(User $mentionedUser, Card $card, User $mentioner): void
   {
     if ($mentionedUser->id === $mentioner->id) {
@@ -164,7 +145,6 @@ class NotificationService
       'data' => $data,
     ]);
 
-    // Broadcast real-time notification
     broadcast(new UserNotification(
       userId: $mentionedUser->id,
       type: 'mention',
@@ -174,9 +154,6 @@ class NotificationService
     ));
   }
 
-  /**
-   * Create a generic notification
-   */
   public function create(
     int $userId,
     string $type,

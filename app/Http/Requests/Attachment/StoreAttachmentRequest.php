@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Requests/Attachment/StoreAttachmentRequest.php
-
 namespace App\Http\Requests\Attachment;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -10,18 +8,18 @@ class StoreAttachmentRequest extends FormRequest
 {
   public function authorize(): bool
   {
-    return true; // Authorization handled by policy
+    return true; 
   }
 
   public function rules(): array
   {
-    // Either file upload OR external URL
+    
     if ($this->hasFile('file')) {
       return [
         'file' => [
           'required',
           'file',
-          'max:10240', // 10MB max
+          'max:10240', 
           'mimes:jpg,jpeg,png,gif,webp,pdf,doc,docx,xls,xlsx,ppt,pptx,txt,zip,rar',
         ],
       ];
@@ -32,13 +30,13 @@ class StoreAttachmentRequest extends FormRequest
         'required',
         'url',
         'max:2048',
-        'regex:/^https?:\/\//', // Must be http or https
+        'regex:/^https?:\/\//', 
       ],
       'file_name' => [
         'required',
         'string',
         'max:255',
-        'regex:/^[\w\-. ]+$/', // Safe filename characters
+        'regex:/^[\w\-. ]+$/', 
       ],
     ];
   }

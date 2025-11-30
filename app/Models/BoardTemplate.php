@@ -52,9 +52,6 @@ class BoardTemplate extends Model
     return $this->visibility === 'global';
   }
 
-  /**
-   * Check if user can access this template
-   */
   public function isAccessibleBy(User $user): bool
   {
     if ($this->isGlobal()) {

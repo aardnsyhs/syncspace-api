@@ -15,9 +15,6 @@ class ChecklistItemController extends Controller
   ) {
   }
 
-  /**
-   * POST /checklists/{checklist}/items
-   */
   public function store(Request $request, Checklist $checklist): JsonResponse
   {
     $board = $checklist->card->column->board;
@@ -27,7 +24,6 @@ class ChecklistItemController extends Controller
       'title' => 'required|string|max:255',
     ]);
 
-    // Get next position
     $maxPosition = $checklist->items()->max('position') ?? -1;
 
     $item = $checklist->items()->create([
@@ -38,12 +34,9 @@ class ChecklistItemController extends Controller
     return response()->json(['data' => $item], 201);
   }
 
-  /**
-   * PATCH /checklist-items/{item}
-   */
   public function update(Request $request, ChecklistItem $checklistItem): JsonResponse
   {
-    // Eager load relationships to avoid null issues
+    
     $checklistItem->load('checklist.card.column.board');
 
     $checklist = $checklistItem->checklist;
@@ -63,15 +56,14 @@ class ChecklistItemController extends Controller
 
     $wasCompleted = $checklistItem->is_completed;
 
-    // Handle completion status change
     if (isset($validated['is_completed'])) {
       if ($validated['is_completed'] && !$wasCompleted) {
         $validated['completed_at'] = now();
-        // Log completion activity
+        
         $this->activityService->logChecklistItemCompleted($card, $request->user(), $checklist, $checklistItem);
       } elseif (!$validated['is_completed'] && $wasCompleted) {
         $validated['completed_at'] = null;
-        // Log uncomplete activity
+        
         $this->activityService->logChecklistItemUncompleted($card, $request->user(), $checklist, $checklistItem);
       }
     }
@@ -81,9 +73,6 @@ class ChecklistItemController extends Controller
     return response()->json(['data' => $checklistItem]);
   }
 
-  /**
-   * DELETE /checklist-items/{item}
-   */
   public function destroy(ChecklistItem $checklistItem): JsonResponse
   {
     $checklistItem->load('checklist.card.column.board');

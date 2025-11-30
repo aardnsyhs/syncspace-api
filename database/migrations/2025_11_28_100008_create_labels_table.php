@@ -11,7 +11,7 @@ return new class extends Migration {
       $table->id();
       $table->foreignId('team_id')->constrained()->cascadeOnDelete();
       $table->string('name');
-      $table->string('color', 7); // hex color
+      $table->string('color', 7); 
       $table->timestamps();
     });
   }

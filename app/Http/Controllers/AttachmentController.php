@@ -16,9 +16,6 @@ class AttachmentController extends Controller
   ) {
   }
 
-  /**
-   * GET /cards/{card}/attachments
-   */
   public function index(Card $card): JsonResponse
   {
     $board = $card->column->board;
@@ -29,18 +26,13 @@ class AttachmentController extends Controller
     return response()->json(['data' => $attachments]);
   }
 
-  /**
-   * POST /cards/{card}/attachments
-   * Upload file or add external URL
-   */
   public function store(Request $request, Card $card): JsonResponse
   {
     $board = $card->column->board;
     $this->authorize('editContent', $board);
 
-    // Validate - either file upload or external URL
     $validated = $request->validate([
-      'file' => 'required_without:url|file|max:10240', // 10MB max
+      'file' => 'required_without:url|file|max:10240', 
       'url' => 'required_without:file|url|max:2048',
       'file_name' => 'required_with:url|string|max:255',
     ]);
@@ -48,7 +40,7 @@ class AttachmentController extends Controller
     $user = $request->user();
 
     if ($request->hasFile('file')) {
-      // Handle file upload
+      
       $file = $request->file('file');
       $path = $file->store('attachments/' . $card->id, 'public');
 
@@ -61,7 +53,7 @@ class AttachmentController extends Controller
         'uploaded_by' => $user->id,
       ]);
     } else {
-      // Handle external URL
+      
       $attachment = $card->attachments()->create([
         'file_name' => $validated['file_name'],
         'file_path' => $validated['url'],
@@ -72,7 +64,6 @@ class AttachmentController extends Controller
       ]);
     }
 
-    // Log activity
     $this->activityService->logAttachmentAdded($card, $user, $attachment);
 
     $attachment->load('uploader:id,name,avatar_url');
@@ -80,9 +71,6 @@ class AttachmentController extends Controller
     return response()->json(['data' => $attachment], 201);
   }
 
-  /**
-   * DELETE /attachments/{attachment}
-   */
   public function destroy(Request $request, Attachment $attachment): JsonResponse
   {
     $card = $attachment->card;
@@ -91,14 +79,12 @@ class AttachmentController extends Controller
 
     $fileName = $attachment->file_name;
 
-    // Delete file from storage if not external
     if (!$attachment->is_external && $attachment->file_path) {
       Storage::disk('public')->delete($attachment->file_path);
     }
 
     $attachment->delete();
 
-    // Log activity
     $this->activityService->logAttachmentRemoved($card, $request->user(), $fileName);
 
     return response()->json(null, 204);

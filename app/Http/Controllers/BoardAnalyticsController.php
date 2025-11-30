@@ -14,10 +14,6 @@ class BoardAnalyticsController extends Controller
   ) {
   }
 
-  /**
-   * GET /boards/{board}/analytics/summary
-   * Returns summary metrics for the board
-   */
   public function summary(Board $board): JsonResponse
   {
     $this->authorize('view', $board);
@@ -27,42 +23,30 @@ class BoardAnalyticsController extends Controller
     return response()->json(['data' => $data]);
   }
 
-  /**
-   * GET /boards/{board}/analytics/throughput?weeks=6
-   * Returns throughput data for chart
-   */
   public function throughput(Request $request, Board $board): JsonResponse
   {
     $this->authorize('view', $board);
 
     $weeks = $request->integer('weeks', 6);
-    $weeks = min(max($weeks, 1), 52); // Clamp between 1-52 weeks
+    $weeks = min(max($weeks, 1), 52); 
 
     $data = $this->analyticsService->getThroughput($board, $weeks);
 
     return response()->json($data);
   }
 
-  /**
-   * GET /boards/{board}/analytics/cumulative-flow?days=30
-   * Returns data for Cumulative Flow Diagram
-   */
   public function cumulativeFlow(Request $request, Board $board): JsonResponse
   {
     $this->authorize('view', $board);
 
     $days = $request->integer('days', 30);
-    $days = min(max($days, 7), 90); // Clamp between 7-90 days
+    $days = min(max($days, 7), 90); 
 
     $data = $this->analyticsService->getCumulativeFlow($board, $days);
 
     return response()->json($data);
   }
 
-  /**
-   * GET /boards/{board}/analytics/assignees
-   * Returns card distribution by assignee
-   */
   public function assignees(Board $board): JsonResponse
   {
     $this->authorize('view', $board);

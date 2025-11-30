@@ -43,7 +43,6 @@ class TeamMemberController extends Controller
       ], 422);
     }
 
-    // Only owner can add admins
     $requestedRole = $validated['role'] ?? 'member';
     $currentUserRole = TeamRole::tryFrom($team->getMemberRole($request->user()));
 
@@ -81,14 +80,12 @@ class TeamMemberController extends Controller
       ], 404);
     }
 
-    // Cannot change own role
     if ($user->id === $request->user()->id) {
       return response()->json([
         'message' => 'You cannot change your own role.',
       ], 422);
     }
 
-    // Only owner can promote to owner or demote from owner
     if ($newRole === TeamRole::OWNER || $targetUserRole === TeamRole::OWNER) {
       if ($currentUserRole !== TeamRole::OWNER) {
         return response()->json([
@@ -96,15 +93,13 @@ class TeamMemberController extends Controller
         ], 403);
       }
 
-      // Transfer ownership
       if ($newRole === TeamRole::OWNER) {
-        // Demote current owner to admin
+        
         $team->members()->updateExistingPivot($request->user()->id, ['role' => 'admin']);
         $team->update(['owner_id' => $user->id]);
       }
     }
 
-    // Admin cannot change other admin's role
     if ($currentUserRole === TeamRole::ADMIN && $targetUserRole === TeamRole::ADMIN) {
       return response()->json([
         'message' => 'Admins cannot change other admin roles.',
@@ -132,21 +127,18 @@ class TeamMemberController extends Controller
       ], 404);
     }
 
-    // Cannot remove owner
     if ($targetUserRole === TeamRole::OWNER) {
       return response()->json([
         'message' => 'Cannot remove team owner. Transfer ownership first.',
       ], 422);
     }
 
-    // Admin cannot remove other admins
     if ($currentUserRole === TeamRole::ADMIN && $targetUserRole === TeamRole::ADMIN) {
       return response()->json([
         'message' => 'Admins cannot remove other admins.',
       ], 403);
     }
 
-    // User can remove themselves (leave team)
     if ($user->id === $request->user()->id) {
       $team->members()->detach($user->id);
       return response()->json(null, 204);

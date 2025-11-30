@@ -29,7 +29,6 @@ class BoardController extends Controller
 
     $board = $team->boards()->create($request->validated());
 
-    // Create default columns
     $defaultColumns = ['To Do', 'In Progress', 'Review', 'Done'];
     foreach ($defaultColumns as $index => $name) {
       $board->columns()->create([
@@ -47,7 +46,6 @@ class BoardController extends Controller
   {
     $this->authorize('view', $board);
 
-    // Load full board state with columns, cards, and related data
     $board->load([
       'columns.cards' => fn($q) => $q->orderBy('position'),
       'columns.cards.assignee',
@@ -65,7 +63,6 @@ class BoardController extends Controller
 
     $board->update($request->validated());
 
-    // Broadcast board updated event
     broadcast(new BoardUpdated($board))->toOthers();
 
     return response()->json([

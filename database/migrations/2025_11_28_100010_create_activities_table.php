@@ -11,8 +11,8 @@ return new class extends Migration {
       $table->id();
       $table->foreignId('card_id')->constrained()->cascadeOnDelete();
       $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-      $table->string('type'); // created, moved, assigned, commented, etc.
-      $table->json('data')->nullable(); // additional context
+      $table->string('type'); 
+      $table->json('data')->nullable(); 
       $table->timestamp('created_at');
 
       $table->index(['card_id', 'created_at']);

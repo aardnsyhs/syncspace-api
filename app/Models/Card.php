@@ -61,7 +61,6 @@ class Card extends Model
     return $this->hasMany(Activity::class)->orderByDesc('created_at');
   }
 
-  // Helper untuk mendapatkan checklist progress total
   public function getChecklistProgressAttribute(): array
   {
     $total = 0;

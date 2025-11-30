@@ -11,7 +11,7 @@ class ActivityController extends Controller
 {
   public function index(Request $request, Board $board): AnonymousResourceCollection
   {
-    // Check if user is member of the team
+    
     if (!$board->team->hasMember($request->user())) {
       abort(403, 'You are not a member of this team.');
     }

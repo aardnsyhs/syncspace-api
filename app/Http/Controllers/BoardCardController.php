@@ -9,18 +9,7 @@ use Illuminate\Http\Request;
 
 class BoardCardController extends Controller
 {
-  /**
-   * GET /boards/{board}/cards
-   * Get filtered cards for a board
-   * 
-   * Query params:
-   * - search: string (searches title and description)
-   * - assignee_id: int (filter by assignee)
-   * - labels[]: array of label IDs
-   * - due: string (overdue|today|this_week|no_due)
-   * - column_id: int (filter by specific column)
-   * - my_cards: bool (only cards assigned to current user)
-   */
+
   public function index(Request $request, Board $board): JsonResponse
   {
     $this->authorize('view', $board);
@@ -30,7 +19,6 @@ class BoardCardController extends Controller
     $query = Card::whereIn('column_id', $columnIds)
       ->with(['assignee:id,name,avatar_url', 'labels', 'column:id,name,position']);
 
-    // Search filter (title + description)
     if ($search = $request->input('search')) {
       $query->where(function ($q) use ($search) {
         $q->where('title', 'like', "%{$search}%")
@@ -38,17 +26,14 @@ class BoardCardController extends Controller
       });
     }
 
-    // Assignee filter
     if ($assigneeId = $request->input('assignee_id')) {
       $query->where('assignee_id', $assigneeId);
     }
 
-    // My cards filter (current user's cards)
     if ($request->boolean('my_cards')) {
       $query->where('assignee_id', $request->user()->id);
     }
 
-    // Labels filter (cards that have ANY of the specified labels)
     if ($labels = $request->input('labels')) {
       $labelIds = is_array($labels) ? $labels : explode(',', $labels);
       $query->whereHas('labels', function ($q) use ($labelIds) {
@@ -56,7 +41,6 @@ class BoardCardController extends Controller
       });
     }
 
-    // Due date filter
     if ($due = $request->input('due')) {
       $today = now()->startOfDay();
 
@@ -80,20 +64,16 @@ class BoardCardController extends Controller
       }
     }
 
-    // Column filter
     if ($columnId = $request->input('column_id')) {
       $query->where('column_id', $columnId);
     }
 
-    // Order by column position, then card position
     $query->orderBy('column_id')->orderBy('position');
 
     $cards = $query->get();
 
-    // Group by column for easier frontend consumption
     $grouped = $cards->groupBy('column_id');
 
-    // Get column info with WIP status
     $columns = $board->columns()
       ->withCount('cards')
       ->orderBy('position')

@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Requests/BoardTemplate/StoreBoardTemplateRequest.php
-
 namespace App\Http\Requests\BoardTemplate;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -10,7 +8,7 @@ class StoreBoardTemplateRequest extends FormRequest
 {
   public function authorize(): bool
   {
-    return true; // Authorization handled by policy
+    return true; 
   }
 
   public function rules(): array

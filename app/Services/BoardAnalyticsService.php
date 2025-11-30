@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class BoardAnalyticsService
 {
-  /**
-   * Get summary analytics for a board
-   */
+
   public function getSummary(Board $board): array
   {
     $columns = $board->columns()->orderBy('position')->get();
@@ -22,7 +20,6 @@ class BoardAnalyticsService
       return $this->emptyResponse();
     }
 
-    // Cards per column
     $cardsPerColumn = Card::whereIn('column_id', $columnIds)
       ->select('column_id', DB::raw('COUNT(*) as count'))
       ->groupBy('column_id')
@@ -36,21 +33,16 @@ class BoardAnalyticsService
       'card_count' => $cardsPerColumn[$col->id] ?? 0,
     ]);
 
-    // Done column (last column)
     $doneColumnId = $columns->last()?->id;
 
-    // Completed cards in last 7 and 30 days
     $completed7Days = $this->getCompletedCount($doneColumnId, 7);
     $completed30Days = $this->getCompletedCount($doneColumnId, 30);
 
-    // Average cycle time for cards completed in last 30 days
     $avgCycleTime = $this->getAverageCycleTime($board, $doneColumnId, 30);
     $avgLeadTime = $this->getAverageLeadTime($board, $doneColumnId, 30);
 
-    // Total cards
     $totalCards = array_sum($cardsPerColumn);
 
-    // WIP (cards not in first or last column)
     $wipCount = $columns->slice(1, -1)->sum(fn($col) => $cardsPerColumn[$col->id] ?? 0);
 
     return [
@@ -64,9 +56,6 @@ class BoardAnalyticsService
     ];
   }
 
-  /**
-   * Get throughput data (completed cards per period)
-   */
   public function getThroughput(Board $board, int $weeks = 6): array
   {
     $columns = $board->columns()->orderBy('position')->get();
@@ -89,7 +78,6 @@ class BoardAnalyticsService
       ->orderBy('year_week')
       ->get();
 
-    // Fill in missing weeks with zero
     $result = [];
     $current = $startDate->copy();
     $end = now()->endOfWeek();
@@ -110,9 +98,6 @@ class BoardAnalyticsService
     return ['data' => $result];
   }
 
-  /**
-   * Get cumulative flow data for CFD chart
-   */
   public function getCumulativeFlow(Board $board, int $days = 30): array
   {
     $columns = $board->columns()->orderBy('position')->get();
@@ -125,7 +110,6 @@ class BoardAnalyticsService
     $startDate = now()->subDays($days)->startOfDay();
     $result = [];
 
-    // For each day, calculate how many cards were in each column at end of day
     for ($i = 0; $i <= $days; $i++) {
       $date = $startDate->copy()->addDays($i);
       $endOfDay = $date->copy()->endOfDay();
@@ -136,10 +120,6 @@ class BoardAnalyticsService
       ];
 
       foreach ($columns as $column) {
-        // Count cards that were in this column at end of day
-        // A card is in column X at time T if:
-        // 1. Its last transition before T was to column X, OR
-        // 2. It was created in column X and never moved before T
 
         $count = $this->getCardCountInColumnAtTime($column->id, $endOfDay, $columnIds);
         $dayData['columns'][$column->id] = $count;
@@ -158,9 +138,6 @@ class BoardAnalyticsService
     ];
   }
 
-  /**
-   * Get cards distribution by assignee
-   */
   public function getAssigneeDistribution(Board $board): array
   {
     $columnIds = $board->columns()->pluck('id')->toArray();
@@ -211,7 +188,6 @@ class BoardAnalyticsService
     if (!$firstColumnId || $columns->count() < 2)
       return null;
 
-    // Get cards completed in last N days
     $completedCardIds = CardTransition::where('to_column_id', $doneColumnId)
       ->where('transitioned_at', '>=', now()->subDays($days))
       ->pluck('card_id')
@@ -223,13 +199,12 @@ class BoardAnalyticsService
     $cycleTimes = [];
 
     foreach ($completedCardIds as $cardId) {
-      // First time card left the first column (started)
+      
       $startedAt = CardTransition::where('card_id', $cardId)
         ->where('from_column_id', $firstColumnId)
         ->orderBy('transitioned_at')
         ->value('transitioned_at');
 
-      // Last time card entered done column
       $completedAt = CardTransition::where('card_id', $cardId)
         ->where('to_column_id', $doneColumnId)
         ->orderByDesc('transitioned_at')
@@ -248,7 +223,6 @@ class BoardAnalyticsService
     if (!$doneColumnId)
       return null;
 
-    // Get cards completed in last N days with their creation time
     $completedCards = CardTransition::where('to_column_id', $doneColumnId)
       ->where('transitioned_at', '>=', now()->subDays($days))
       ->join('cards', 'card_transitions.card_id', '=', 'cards.id')
@@ -268,13 +242,13 @@ class BoardAnalyticsService
 
   private function getCardCountInColumnAtTime(int $columnId, Carbon $time, array $boardColumnIds): int
   {
-    // Cards currently in this column that existed at that time
+    
     return DB::table('cards')
       ->whereIn('column_id', $boardColumnIds)
       ->where('created_at', '<=', $time)
       ->where(function ($query) use ($columnId, $time) {
         $query->where(function ($q) use ($columnId, $time) {
-          // Card's last transition before $time was to this column
+          
           $q->whereExists(function ($sub) use ($columnId, $time) {
             $sub->select(DB::raw(1))
               ->from('card_transitions as ct')
@@ -290,7 +264,7 @@ class BoardAnalyticsService
               });
           });
         })->orWhere(function ($q) use ($columnId, $time) {
-          // Card was created in this column and never moved before $time
+          
           $q->where('column_id', $columnId)
             ->whereNotExists(function ($sub) use ($time) {
             $sub->select(DB::raw(1))

@@ -110,10 +110,6 @@ class ColumnController extends Controller
     ]);
   }
 
-  /**
-   * PATCH /columns/{column}/wip-limit
-   * Set WIP limit for a column (only OWNER/ADMIN)
-   */
   public function updateWipLimit(Request $request, Column $column): JsonResponse
   {
     $this->authorize('update', $column);

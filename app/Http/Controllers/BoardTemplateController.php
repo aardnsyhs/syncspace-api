@@ -10,24 +10,19 @@ use Illuminate\Http\Request;
 
 class BoardTemplateController extends Controller
 {
-  /**
-   * GET /board-templates
-   * List templates accessible to user (global + team templates)
-   */
+
   public function index(Request $request): JsonResponse
   {
     $user = $request->user();
 
-    // Get user's team IDs
     $teamIds = $user->teams()->pluck('teams.id');
 
-    // Get global templates + team templates
     $templates = BoardTemplate::with('columns.cards')
       ->where(function ($query) use ($teamIds) {
         $query->where('visibility', 'global')
           ->orWhereIn('team_id', $teamIds);
       })
-      ->orderBy('visibility') // global first
+      ->orderBy('visibility') 
       ->orderBy('name')
       ->get();
 
@@ -36,10 +31,6 @@ class BoardTemplateController extends Controller
     ]);
   }
 
-  /**
-   * GET /board-templates/{template}
-   * Get template detail
-   */
   public function show(Request $request, BoardTemplate $template): JsonResponse
   {
     if (!$template->isAccessibleBy($request->user())) {
@@ -53,10 +44,6 @@ class BoardTemplateController extends Controller
     ]);
   }
 
-  /**
-   * POST /teams/{team}/board-templates
-   * Create template from existing board or new definition
-   */
   public function store(Request $request, Team $team): JsonResponse
   {
     $this->authorize('manageBoards', $team);
@@ -80,10 +67,9 @@ class BoardTemplateController extends Controller
     $template->save();
 
     if (!empty($validated['board_id'])) {
-      // Copy from existing board
+      
       $board = Board::with('columns.cards')->findOrFail($validated['board_id']);
 
-      // Verify user has access to this board
       $this->authorize('view', $board);
 
       foreach ($board->columns as $column) {
@@ -93,7 +79,6 @@ class BoardTemplateController extends Controller
           'wip_limit' => $column->wip_limit,
         ]);
 
-        // Copy sample cards (first 3 per column)
         foreach ($column->cards->take(3) as $card) {
           $templateColumn->cards()->create([
             'title' => $card->title,
@@ -103,7 +88,7 @@ class BoardTemplateController extends Controller
         }
       }
     } else {
-      // Create from definition
+      
       foreach ($validated['columns'] as $index => $columnData) {
         $template->columns()->create([
           'name' => $columnData['name'],
@@ -120,14 +105,10 @@ class BoardTemplateController extends Controller
     ], 201);
   }
 
-  /**
-   * DELETE /board-templates/{template}
-   */
   public function destroy(Request $request, BoardTemplate $template): JsonResponse
   {
     $user = $request->user();
 
-    // Only creator or team owner/admin can delete
     $canDelete = $template->created_by === $user->id;
 
     if (!$canDelete && $template->team_id) {
@@ -144,10 +125,6 @@ class BoardTemplateController extends Controller
     return response()->json(null, 204);
   }
 
-  /**
-   * POST /teams/{team}/boards/from-template
-   * Create board from template
-   */
   public function createBoardFromTemplate(Request $request, Team $team): JsonResponse
   {
     $this->authorize('create', [Board::class, $team]);
@@ -165,14 +142,12 @@ class BoardTemplateController extends Controller
       abort(403, 'You do not have access to this template');
     }
 
-    // Create board
     $board = $team->boards()->create([
       'name' => $validated['name'],
       'description' => $validated['description'] ?? null,
       'color' => $validated['color'] ?? null,
     ]);
 
-    // Copy columns and cards from template
     foreach ($template->columns as $templateColumn) {
       $column = $board->columns()->create([
         'name' => $templateColumn->name,

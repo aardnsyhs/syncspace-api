@@ -15,9 +15,6 @@ class ChecklistController extends Controller
   ) {
   }
 
-  /**
-   * GET /cards/{card}/checklists
-   */
   public function index(Card $card): JsonResponse
   {
     $board = $card->column->board;
@@ -25,7 +22,6 @@ class ChecklistController extends Controller
 
     $checklists = $card->checklists()->with('items')->get();
 
-    // Add progress to each checklist
     $checklistsWithProgress = $checklists->map(function ($checklist) {
       $checklist->setAttribute('progress', $checklist->progress);
       return $checklist;
@@ -34,9 +30,6 @@ class ChecklistController extends Controller
     return response()->json(['data' => $checklistsWithProgress]);
   }
 
-  /**
-   * POST /cards/{card}/checklists
-   */
   public function store(Request $request, Card $card): JsonResponse
   {
     $board = $card->column->board;
@@ -46,7 +39,6 @@ class ChecklistController extends Controller
       'title' => 'required|string|max:255',
     ]);
 
-    // Get next position
     $maxPosition = $card->checklists()->max('position') ?? -1;
 
     $checklist = $card->checklists()->create([
@@ -54,7 +46,6 @@ class ChecklistController extends Controller
       'position' => $maxPosition + 1,
     ]);
 
-    // Log activity
     $this->activityService->logChecklistAdded($card, $request->user(), $checklist);
 
     return response()->json([
@@ -62,9 +53,6 @@ class ChecklistController extends Controller
     ], 201);
   }
 
-  /**
-   * PATCH /checklists/{checklist}
-   */
   public function update(Request $request, Checklist $checklist): JsonResponse
   {
     $board = $checklist->card->column->board;
@@ -82,9 +70,6 @@ class ChecklistController extends Controller
     ]);
   }
 
-  /**
-   * DELETE /checklists/{checklist}
-   */
   public function destroy(Request $request, Checklist $checklist): JsonResponse
   {
     $card = $checklist->card;
@@ -94,7 +79,6 @@ class ChecklistController extends Controller
     $checklistTitle = $checklist->title;
     $checklist->delete();
 
-    // Log activity
     $this->activityService->logChecklistRemoved($card, $request->user(), $checklistTitle);
 
     return response()->json(null, 204);

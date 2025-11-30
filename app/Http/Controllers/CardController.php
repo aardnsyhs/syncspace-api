@@ -41,7 +41,6 @@ class CardController extends Controller
 
     $boardId = $column->board_id;
 
-    // Record initial transition (card created in this column)
     CardTransition::create([
       'card_id' => $card->id,
       'from_column_id' => null,
@@ -86,10 +85,9 @@ class CardController extends Controller
       $this->activityService->logCardAssigned($card, $request->user(), $card->assignee);
 
       if ($card->assignee_id && $card->assignee_id !== $request->user()->id) {
-        // Save notification to database
+        
         $this->notificationService->notifyCardAssigned($card, $card->assignee, $request->user());
 
-        // Broadcast real-time notification
         broadcast(new UserNotification(
           userId: $card->assignee_id,
           type: 'card_assigned',
@@ -146,14 +144,13 @@ class CardController extends Controller
     $oldColumnName = $card->column->name;
     $boardId = $card->column->board_id;
 
-    // Check WIP limit for target column (if moving to different column)
     $wipExceeded = false;
     $newColumn = null;
     if ($newColumnId !== $oldColumnId) {
       $newColumn = Column::find($newColumnId);
       if ($newColumn && $newColumn->wouldExceedWip()) {
         $wipExceeded = true;
-        // We allow the move but flag it (warning approach)
+        
       }
     }
 
@@ -184,7 +181,6 @@ class CardController extends Controller
       ]);
     });
 
-    // Record transition for analytics
     if ($newColumnId !== $oldColumnId) {
       CardTransition::create([
         'card_id' => $card->id,
@@ -201,7 +197,6 @@ class CardController extends Controller
     if ($newColumnId !== $oldColumnId) {
       $this->activityService->logCardMoved($card, $request->user(), $oldColumnName, $newColumnName);
 
-      // Notify assignee about card move
       $this->notificationService->notifyCardMoved($card, $oldColumnName, $newColumnName, $request->user());
     }
 
@@ -217,7 +212,6 @@ class CardController extends Controller
       'data' => new CardResource($card->load(['assignee', 'labels'])),
     ];
 
-    // Add WIP warning if exceeded
     if ($wipExceeded && $newColumn) {
       $response['wip_warning'] = [
         'exceeded' => true,

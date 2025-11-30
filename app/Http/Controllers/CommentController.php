@@ -46,11 +46,9 @@ class CommentController extends Controller
     $this->activityService->logCommentCreated($comment, $request->user());
     broadcast(new CommentCreated($comment, $boardId, $card->id))->toOthers();
 
-    // Save notification to database and broadcast
     $commentPreview = mb_substr($comment->body, 0, 50);
     $this->notificationService->notifyNewComment($card, $request->user(), $commentPreview);
 
-    // Notify card assignee via real-time
     if ($card->assignee_id && $card->assignee_id !== $request->user()->id) {
       broadcast(new UserNotification(
         userId: $card->assignee_id,
@@ -65,7 +63,6 @@ class CommentController extends Controller
       ));
     }
 
-    // Parse and notify mentioned users
     $this->notifyMentionedUsers($comment, $card, $request->user(), $boardId);
 
     return response()->json([
@@ -73,12 +70,9 @@ class CommentController extends Controller
     ], 201);
   }
 
-  /**
-   * Parse mentions from comment body and notify mentioned users
-   */
   private function notifyMentionedUsers(Comment $comment, Card $card, User $commenter, int $boardId): void
   {
-    // Get team members who can be mentioned
+    
     $teamId = $card->column->board->team_id;
     $teamMembers = User::whereHas('teams', function ($query) use ($teamId) {
       $query->where('teams.id', $teamId);
@@ -87,20 +81,17 @@ class CommentController extends Controller
     $notifiedUserIds = [];
     $commentBody = $comment->body;
 
-    // Check each team member's name in the comment
     foreach ($teamMembers as $member) {
-      // Skip the commenter
+      
       if ($member->id === $commenter->id) {
         continue;
       }
 
-      // Check if @username exists in comment (case-insensitive)
       $pattern = '/@' . preg_quote($member->name, '/') . '\b/i';
 
       if (preg_match($pattern, $commentBody) && !in_array($member->id, $notifiedUserIds)) {
         $notifiedUserIds[] = $member->id;
 
-        // Save notification to database
         $this->notificationService->create(
           userId: $member->id,
           type: 'mention',
@@ -114,7 +105,6 @@ class CommentController extends Controller
           ]
         );
 
-        // Broadcast real-time notification
         broadcast(new UserNotification(
           userId: $member->id,
           type: 'mention',

@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 
 class BoardLabelController extends Controller
 {
-  /**
-   * GET /boards/{board}/labels
-   */
+
   public function index(Board $board): JsonResponse
   {
     $this->authorize('view', $board);
@@ -21,9 +19,6 @@ class BoardLabelController extends Controller
     return response()->json(['data' => $labels]);
   }
 
-  /**
-   * POST /boards/{board}/labels
-   */
   public function store(Request $request, Board $board): JsonResponse
   {
     $this->authorize('editContent', $board);
@@ -38,14 +33,10 @@ class BoardLabelController extends Controller
     return response()->json(['data' => $label], 201);
   }
 
-  /**
-   * PATCH /boards/{board}/labels/{label}
-   */
   public function update(Request $request, Board $board, Label $label): JsonResponse
   {
     $this->authorize('editContent', $board);
 
-    // Ensure label belongs to board
     if ($label->board_id !== $board->id) {
       abort(404);
     }
@@ -60,9 +51,6 @@ class BoardLabelController extends Controller
     return response()->json(['data' => $label]);
   }
 
-  /**
-   * DELETE /boards/{board}/labels/{label}
-   */
   public function destroy(Board $board, Label $label): JsonResponse
   {
     $this->authorize('editContent', $board);

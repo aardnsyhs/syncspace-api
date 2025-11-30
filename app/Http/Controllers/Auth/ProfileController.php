@@ -12,9 +12,7 @@ use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
-  /**
-   * Update user profile
-   */
+
   public function update(Request $request): JsonResponse
   {
     $validated = $request->validate([
@@ -31,9 +29,6 @@ class ProfileController extends Controller
     ]);
   }
 
-  /**
-   * Upload user avatar
-   */
   public function uploadAvatar(Request $request): JsonResponse
   {
     $request->validate([
@@ -42,7 +37,6 @@ class ProfileController extends Controller
 
     $user = $request->user();
 
-    // Delete old avatar if exists
     if ($user->avatar_url) {
       $oldPath = str_replace('/storage/', '', parse_url($user->avatar_url, PHP_URL_PATH));
       if ($oldPath && Storage::disk('public')->exists($oldPath)) {
@@ -50,7 +44,6 @@ class ProfileController extends Controller
       }
     }
 
-    // Store new avatar
     $path = $request->file('avatar')->store('avatars', 'public');
     $avatarUrl = Storage::disk('public')->url($path);
 
@@ -62,9 +55,6 @@ class ProfileController extends Controller
     ]);
   }
 
-  /**
-   * Update user password
-   */
   public function updatePassword(Request $request): JsonResponse
   {
     $validated = $request->validate([

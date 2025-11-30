@@ -32,7 +32,6 @@ class TeamController extends Controller
       'owner_id' => $request->user()->id,
     ]);
 
-    // Add owner as member with owner role
     $team->members()->attach($request->user()->id, ['role' => 'owner']);
 
     return response()->json([
@@ -44,7 +43,6 @@ class TeamController extends Controller
   {
     $this->authorize('view', $team);
 
-    // Include user's role in response
     $team->load([
       'members' => function ($query) use ($request) {
         $query->where('user_id', $request->user()->id);

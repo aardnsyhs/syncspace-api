@@ -47,9 +47,6 @@ class Board extends Model
     return $this->hasMany(Label::class);
   }
 
-  /**
-   * Enable public sharing and generate token
-   */
   public function enablePublicSharing(): void
   {
     if (!$this->public_token) {
@@ -59,27 +56,18 @@ class Board extends Model
     $this->save();
   }
 
-  /**
-   * Disable public sharing
-   */
   public function disablePublicSharing(): void
   {
     $this->is_public = false;
     $this->save();
   }
 
-  /**
-   * Regenerate public token (revokes old links)
-   */
   public function regeneratePublicToken(): void
   {
     $this->public_token = (string) Str::uuid();
     $this->save();
   }
 
-  /**
-   * Check if public link is valid
-   */
   public function isPublicLinkValid(): bool
   {
     if (!$this->is_public || !$this->public_token) {
@@ -93,9 +81,6 @@ class Board extends Model
     return true;
   }
 
-  /**
-   * Get public URL
-   */
   public function getPublicUrlAttribute(): ?string
   {
     if (!$this->public_token) {

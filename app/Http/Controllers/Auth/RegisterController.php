@@ -12,7 +12,7 @@ class RegisterController extends Controller
 {
   public function __invoke(RegisterRequest $request): JsonResponse
   {
-    // UserObserver will automatically create a personal team
+    
     $user = User::create([
       'name' => $request->name,
       'email' => $request->email,

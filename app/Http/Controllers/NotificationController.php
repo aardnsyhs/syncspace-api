@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-  /**
-   * Get user notifications
-   */
+
   public function index(Request $request): JsonResponse
   {
     $user = $request->user();
@@ -42,12 +40,9 @@ class NotificationController extends Controller
     ]);
   }
 
-  /**
-   * Mark notification as read
-   */
   public function markAsRead(Request $request, Notification $notification): JsonResponse
   {
-    // Ensure user owns this notification
+    
     if ($notification->user_id !== $request->user()->id) {
       return response()->json(['message' => 'Unauthorized'], 403);
     }
@@ -59,9 +54,6 @@ class NotificationController extends Controller
     ]);
   }
 
-  /**
-   * Mark all notifications as read
-   */
   public function markAllAsRead(Request $request): JsonResponse
   {
     Notification::forUser($request->user()->id)
@@ -73,12 +65,9 @@ class NotificationController extends Controller
     ]);
   }
 
-  /**
-   * Delete a notification
-   */
   public function destroy(Request $request, Notification $notification): JsonResponse
   {
-    // Ensure user owns this notification
+    
     if ($notification->user_id !== $request->user()->id) {
       return response()->json(['message' => 'Unauthorized'], 403);
     }
@@ -88,9 +77,6 @@ class NotificationController extends Controller
     return response()->json(null, 204);
   }
 
-  /**
-   * Clear all notifications
-   */
   public function clearAll(Request $request): JsonResponse
   {
     Notification::forUser($request->user()->id)->delete();

@@ -10,10 +10,10 @@ return new class extends Migration {
     Schema::create('notifications', function (Blueprint $table) {
       $table->id();
       $table->foreignId('user_id')->constrained()->onDelete('cascade');
-      $table->string('type'); // card_assigned, comment, mention, due_soon, card_moved
+      $table->string('type'); 
       $table->string('title');
       $table->text('message');
-      $table->json('data')->nullable(); // Additional data like card_id, board_id, etc.
+      $table->json('data')->nullable(); 
       $table->timestamp('read_at')->nullable();
       $table->timestamps();
 

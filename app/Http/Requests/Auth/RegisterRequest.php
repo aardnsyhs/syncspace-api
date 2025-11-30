@@ -20,7 +20,7 @@ class RegisterRequest extends FormRequest
         'string',
         'min:2',
         'max:100',
-        'regex:/^[\pL\s\-\']+$/u', // Only letters, spaces, hyphens, apostrophes
+        'regex:/^[\pL\s\-\']+$/u', 
       ],
       'email' => [
         'required',

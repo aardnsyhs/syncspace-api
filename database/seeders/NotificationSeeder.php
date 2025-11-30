@@ -13,7 +13,7 @@ class NotificationSeeder extends Seeder
     $users = User::all();
 
     foreach ($users as $user) {
-      // Create some sample notifications for each user
+      
       Notification::create([
         'user_id' => $user->id,
         'type' => 'card_assigned',

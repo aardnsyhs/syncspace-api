@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Middleware/LogSecurityEvents.php
-
 namespace App\Http\Middleware;
 
 use Closure;
@@ -11,14 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LogSecurityEvents
 {
-  /**
-   * Handle an incoming request.
-   */
+
   public function handle(Request $request, Closure $next): Response
   {
     $response = $next($request);
 
-    // Log failed authentication attempts
     if ($this->isAuthEndpoint($request) && $response->getStatusCode() === 422) {
       Log::channel('security')->warning('Failed login attempt', [
         'ip' => $request->ip(),
@@ -28,7 +23,6 @@ class LogSecurityEvents
       ]);
     }
 
-    // Log unauthorized access attempts
     if ($response->getStatusCode() === 403) {
       Log::channel('security')->warning('Unauthorized access attempt', [
         'ip' => $request->ip(),
@@ -40,7 +34,6 @@ class LogSecurityEvents
       ]);
     }
 
-    // Log rate limit exceeded
     if ($response->getStatusCode() === 429) {
       Log::channel('security')->warning('Rate limit exceeded', [
         'ip' => $request->ip(),
@@ -53,9 +46,6 @@ class LogSecurityEvents
     return $response;
   }
 
-  /**
-   * Check if request is to an auth endpoint.
-   */
   private function isAuthEndpoint(Request $request): bool
   {
     return in_array($request->path(), ['api/login', 'api/register']);

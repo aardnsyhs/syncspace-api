@@ -8,10 +8,7 @@ use Illuminate\Http\Request;
 
 class PublicBoardController extends Controller
 {
-  /**
-   * POST /boards/{board}/public/enable
-   * Enable public sharing
-   */
+
   public function enable(Request $request, Board $board): JsonResponse
   {
     $this->authorize('update', $board);
@@ -28,10 +25,6 @@ class PublicBoardController extends Controller
     ]);
   }
 
-  /**
-   * POST /boards/{board}/public/disable
-   * Disable public sharing
-   */
   public function disable(Request $request, Board $board): JsonResponse
   {
     $this->authorize('update', $board);
@@ -46,10 +39,6 @@ class PublicBoardController extends Controller
     ]);
   }
 
-  /**
-   * POST /boards/{board}/public/regenerate
-   * Regenerate public token (revokes old links)
-   */
   public function regenerate(Request $request, Board $board): JsonResponse
   {
     $this->authorize('update', $board);
@@ -65,10 +54,6 @@ class PublicBoardController extends Controller
     ]);
   }
 
-  /**
-   * GET /public/boards/{token}
-   * Get public board (no auth required)
-   */
   public function show(string $token): JsonResponse
   {
     $board = Board::where('public_token', $token)->first();
@@ -79,7 +64,6 @@ class PublicBoardController extends Controller
       ], 404);
     }
 
-    // Load board with safe data only
     $board->load([
       'columns' => fn($q) => $q->orderBy('position'),
       'columns.cards' => fn($q) => $q->orderBy('position'),
@@ -93,9 +77,6 @@ class PublicBoardController extends Controller
     ]);
   }
 
-  /**
-   * Format board for public view (exclude sensitive data)
-   */
   private function formatPublicBoard(Board $board): array
   {
     return [
@@ -120,7 +101,7 @@ class PublicBoardController extends Controller
             'color' => $label->color,
           ]),
           'checklist_progress' => $this->getChecklistProgress($card),
-          // Exclude: assignee (privacy), comments, attachments details
+          
         ]),
       ]),
       'labels' => $board->labels->map(fn($label) => [

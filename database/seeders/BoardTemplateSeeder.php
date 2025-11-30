@@ -10,7 +10,7 @@ class BoardTemplateSeeder extends Seeder
 {
   public function run(): void
   {
-    // Get or create a system user for global templates
+    
     $systemUser = User::firstOrCreate(
       ['email' => 'system@syncspace.app'],
       ['name' => 'Syncspace', 'password' => bcrypt('system')]
@@ -89,7 +89,6 @@ class BoardTemplateSeeder extends Seeder
         ]
       );
 
-      // Clear existing columns and recreate
       $template->columns()->delete();
 
       foreach ($templateData['columns'] as $index => $columnData) {

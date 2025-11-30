@@ -6,9 +6,6 @@ use App\Models\Column;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Card>
- */
 class CardFactory extends Factory
 {
   public function definition(): array

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
   public function up(): void
   {
-    // Add indexes for better filter performance
+    
     Schema::table('cards', function (Blueprint $table) {
       $table->index('assignee_id');
       $table->index('due_date');

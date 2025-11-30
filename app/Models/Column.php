@@ -33,9 +33,6 @@ class Column extends Model
     return $this->hasMany(Card::class)->orderBy('position');
   }
 
-  /**
-   * Check if WIP limit is exceeded
-   */
   public function isWipExceeded(): bool
   {
     if ($this->wip_limit === null) {
@@ -45,9 +42,6 @@ class Column extends Model
     return $this->cards()->count() > $this->wip_limit;
   }
 
-  /**
-   * Check if adding one more card would exceed WIP limit
-   */
   public function wouldExceedWip(): bool
   {
     if ($this->wip_limit === null) {
@@ -57,9 +51,6 @@ class Column extends Model
     return $this->cards()->count() >= $this->wip_limit;
   }
 
-  /**
-   * Get WIP status info
-   */
   public function getWipStatusAttribute(): array
   {
     $count = $this->cards()->count();

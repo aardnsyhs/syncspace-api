@@ -11,10 +11,10 @@ return new class extends Migration {
       $table->id();
       $table->foreignId('card_id')->constrained()->cascadeOnDelete();
       $table->string('file_name');
-      $table->string('file_path'); // Storage path or external URL
-      $table->unsignedBigInteger('file_size')->nullable(); // In bytes
+      $table->string('file_path'); 
+      $table->unsignedBigInteger('file_size')->nullable(); 
       $table->string('mime_type')->nullable();
-      $table->boolean('is_external')->default(false); // true if URL, false if uploaded
+      $table->boolean('is_external')->default(false); 
       $table->foreignId('uploaded_by')->constrained('users')->cascadeOnDelete();
       $table->timestamps();
 

@@ -11,26 +11,20 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-  /**
-   * Get dashboard statistics
-   */
+
   public function stats(Request $request): JsonResponse
   {
     $user = $request->user();
     $teamIds = $user->teams()->pluck('teams.id');
 
-    // Get boards from user's teams
     $boardIds = Board::whereIn('team_id', $teamIds)->pluck('id');
 
-    // Total boards
     $totalBoards = $boardIds->count();
 
-    // Total cards
     $totalCards = Card::whereHas('column', function ($q) use ($boardIds) {
       $q->whereIn('board_id', $boardIds);
     })->count();
 
-    // Cards due soon (within 7 days)
     $cardsDueSoon = Card::whereHas('column', function ($q) use ($boardIds) {
       $q->whereIn('board_id', $boardIds);
     })
@@ -39,7 +33,6 @@ class DashboardController extends Controller
       ->where('due_date', '<=', Carbon::now()->addDays(7))
       ->count();
 
-    // Completed cards (in columns named "Done" or similar)
     $completedCards = Card::whereHas('column', function ($q) use ($boardIds) {
       $q->whereIn('board_id', $boardIds)
         ->where(function ($q2) {
@@ -59,9 +52,6 @@ class DashboardController extends Controller
     ]);
   }
 
-  /**
-   * Get recent activities
-   */
   public function activities(Request $request): JsonResponse
   {
     $user = $request->user();
@@ -95,9 +85,6 @@ class DashboardController extends Controller
     ]);
   }
 
-  /**
-   * Get cards assigned to current user
-   */
   public function myCards(Request $request): JsonResponse
   {
     $user = $request->user();

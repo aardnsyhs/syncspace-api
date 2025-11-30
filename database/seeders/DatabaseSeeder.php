@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
 {
   public function run(): void
   {
-    // Create demo users (UserObserver auto-creates personal teams)
+    
     $owner = User::factory()->create([
       'name' => 'John Doe (Owner)',
       'email' => 'owner@example.com',
@@ -40,20 +40,17 @@ class DatabaseSeeder extends Seeder
       'password' => bcrypt('password'),
     ]);
 
-    // Create a shared team (separate from personal teams)
     $team = Team::factory()->create([
       'name' => 'Acme Corp',
       'slug' => 'acme-corp',
       'owner_id' => $owner->id,
     ]);
 
-    // Add members with different roles to shared team
     $team->members()->attach($owner->id, ['role' => 'owner']);
     $team->members()->attach($admin->id, ['role' => 'admin']);
     $team->members()->attach($member->id, ['role' => 'member']);
     $team->members()->attach($viewer->id, ['role' => 'viewer']);
 
-    // Create a board
     $board = Board::factory()->create([
       'team_id' => $team->id,
       'name' => 'Project Alpha',
@@ -61,7 +58,6 @@ class DatabaseSeeder extends Seeder
       'color' => '#3b82f6',
     ]);
 
-    // Create labels for the board (labels are now board-scoped)
     $labels = collect([
       ['name' => 'Bug', 'color' => '#ef4444'],
       ['name' => 'Feature', 'color' => '#3b82f6'],
@@ -69,7 +65,6 @@ class DatabaseSeeder extends Seeder
       ['name' => 'Urgent', 'color' => '#f97316'],
     ])->map(fn($label) => Label::create([...$label, 'board_id' => $board->id]));
 
-    // Create columns
     $columnNames = ['To Do', 'In Progress', 'Review', 'Done'];
     $columns = collect($columnNames)->map(fn($name, $index) => Column::create([
       'board_id' => $board->id,
@@ -79,7 +74,6 @@ class DatabaseSeeder extends Seeder
 
     $allMembers = [$owner, $admin, $member, $viewer];
 
-    // Create cards in each column
     $columns->each(function ($column, $colIndex) use ($allMembers, $labels) {
       $cardCount = match ($colIndex) {
         0 => 4,
@@ -113,7 +107,6 @@ class DatabaseSeeder extends Seeder
       }
     });
 
-    // Create second board
     Board::factory()->create([
       'team_id' => $team->id,
       'name' => 'Marketing Campaign',
