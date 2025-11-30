@@ -39,4 +39,9 @@ class CardMoved implements ShouldBroadcastNow
       'position' => $this->position,
     ];
   }
+
+  public function broadcastAs(): string
+  {
+    return 'CardMoved';
+  }
 }

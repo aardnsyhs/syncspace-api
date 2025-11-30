@@ -33,4 +33,9 @@ class CardUpdated implements ShouldBroadcastNow
       'card' => new CardResource($this->card->load(['assignee', 'labels'])),
     ];
   }
+
+  public function broadcastAs(): string
+  {
+    return 'CardUpdated';
+  }
 }

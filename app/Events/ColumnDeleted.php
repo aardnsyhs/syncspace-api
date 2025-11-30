@@ -31,4 +31,9 @@ class ColumnDeleted implements ShouldBroadcastNow
       'column_id' => $this->columnId,
     ];
   }
+
+  public function broadcastAs(): string
+  {
+    return 'ColumnDeleted';
+  }
 }

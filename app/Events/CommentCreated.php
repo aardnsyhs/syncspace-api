@@ -35,4 +35,9 @@ class CommentCreated implements ShouldBroadcastNow
       'card_id' => $this->cardId,
     ];
   }
+
+  public function broadcastAs(): string
+  {
+    return 'CommentCreated';
+  }
 }

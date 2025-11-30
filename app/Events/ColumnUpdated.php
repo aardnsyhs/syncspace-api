@@ -32,4 +32,9 @@ class ColumnUpdated implements ShouldBroadcastNow
       'column' => new ColumnResource($this->column),
     ];
   }
+
+  public function broadcastAs(): string
+  {
+    return 'ColumnUpdated';
+  }
 }

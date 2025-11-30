@@ -32,4 +32,9 @@ class BoardUpdated implements ShouldBroadcastNow
       'board' => new BoardResource($this->board),
     ];
   }
+
+  public function broadcastAs(): string
+  {
+    return 'BoardUpdated';
+  }
 }

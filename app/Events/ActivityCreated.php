@@ -32,4 +32,9 @@ class ActivityCreated implements ShouldBroadcastNow
       'activity' => new ActivityResource($this->activity),
     ];
   }
+
+  public function broadcastAs(): string
+  {
+    return 'ActivityCreated';
+  }
 }

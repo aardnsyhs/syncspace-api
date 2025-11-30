@@ -34,4 +34,9 @@ class CardCreated implements ShouldBroadcastNow
       'column_id' => $this->card->column_id,
     ];
   }
+
+  public function broadcastAs(): string
+  {
+    return 'CardCreated';
+  }
 }
