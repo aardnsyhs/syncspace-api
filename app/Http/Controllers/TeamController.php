@@ -17,9 +17,21 @@ class TeamController extends Controller
   {
     $teams = $request->user()
       ->teams()
-      ->with('boards:id,team_id,name,color')
+      ->with([
+        'boards' => function ($query) {
+          $query->select('id', 'team_id', 'name', 'description', 'color', 'created_at')
+            ->withCount('cards');
+        }
+      ])
       ->withCount(['members', 'boards'])
       ->get();
+
+    // Add members_count to each board (same as team members)
+    foreach ($teams as $team) {
+      foreach ($team->boards as $board) {
+        $board->members_count = $team->members_count;
+      }
+    }
 
     return TeamResource::collection($teams);
   }

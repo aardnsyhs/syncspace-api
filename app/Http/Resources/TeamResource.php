@@ -20,7 +20,11 @@ class TeamResource extends JsonResource
       'boards' => $this->whenLoaded('boards', fn() => $this->boards->map(fn($board) => [
         'id' => $board->id,
         'name' => $board->name,
+        'description' => $board->description,
         'color' => $board->color,
+        'cards_count' => $board->cards_count ?? 0,
+        'members_count' => $board->members_count ?? 0,
+        'created_at' => $board->created_at?->toISOString(),
       ])),
       'created_at' => $this->created_at->toISOString(),
     ];
