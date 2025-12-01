@@ -26,7 +26,6 @@ class TeamController extends Controller
       ->withCount(['members', 'boards'])
       ->get();
 
-    // Add members_count to each board (same as team members)
     foreach ($teams as $team) {
       foreach ($team->boards as $board) {
         $board->members_count = $team->members_count;
