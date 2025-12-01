@@ -81,4 +81,20 @@ class ProfileController extends Controller
       'message' => 'Password updated successfully.',
     ]);
   }
+
+  public function updateNotificationPreferences(Request $request): JsonResponse
+  {
+    $validated = $request->validate([
+      'email_notifications' => ['sometimes', 'boolean'],
+      'desktop_notifications' => ['sometimes', 'boolean'],
+    ]);
+
+    $user = $request->user();
+    $user->update($validated);
+
+    return response()->json([
+      'message' => 'Notification preferences updated successfully.',
+      'data' => new UserResource($user->fresh()),
+    ]);
+  }
 }

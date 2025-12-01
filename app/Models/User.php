@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\CustomResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,6 +20,8 @@ class User extends Authenticatable
     'email',
     'password',
     'avatar_url',
+    'email_notifications',
+    'desktop_notifications',
   ];
 
   protected $hidden = [
@@ -31,6 +34,8 @@ class User extends Authenticatable
     return [
       'email_verified_at' => 'datetime',
       'password' => 'hashed',
+      'email_notifications' => 'boolean',
+      'desktop_notifications' => 'boolean',
     ];
   }
 
@@ -59,5 +64,10 @@ class User extends Authenticatable
   public function activities(): HasMany
   {
     return $this->hasMany(Activity::class);
+  }
+
+  public function sendPasswordResetNotification($token): void
+  {
+    $this->notify(new CustomResetPasswordNotification($token));
   }
 }

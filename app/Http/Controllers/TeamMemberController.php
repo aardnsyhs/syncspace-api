@@ -6,6 +6,7 @@ use App\Enums\TeamRole;
 use App\Http\Resources\UserResource;
 use App\Models\Team;
 use App\Models\User;
+use App\Notifications\TeamInvitationNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -56,8 +57,13 @@ class TeamMemberController extends Controller
       'role' => $requestedRole,
     ]);
 
+    // Send invitation email
+    if ($user->email_notifications) {
+      $user->notify(new TeamInvitationNotification($team, $request->user(), $requestedRole));
+    }
+
     return response()->json([
-      'message' => 'Member added successfully.',
+      'message' => 'Member added successfully. An invitation email has been sent.',
       'data' => new UserResource($user),
     ], 201);
   }

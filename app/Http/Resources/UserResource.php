@@ -14,6 +14,8 @@ class UserResource extends JsonResource
       'name' => $this->name,
       'email' => $this->email,
       'avatar_url' => $this->avatar_url,
+      'email_notifications' => $this->email_notifications,
+      'desktop_notifications' => $this->desktop_notifications,
       'role' => $this->whenPivotLoaded('team_user', fn() => $this->pivot->role),
       'created_at' => $this->created_at->toISOString(),
     ];

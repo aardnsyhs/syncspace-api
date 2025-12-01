@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResendOTPController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Auth\VerifyOTPController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\BoardAnalyticsController;
 use App\Http\Controllers\BoardCardController;
@@ -56,13 +60,20 @@ Route::middleware('throttle:register')->group(function () {
   Route::post('/register', RegisterController::class);
 });
 
+Route::middleware('throttle:auth')->group(function () {
+  Route::post('/forgot-password', ForgotPasswordController::class);
+  Route::post('/reset-password', ResetPasswordController::class);
+  Route::post('/verify-otp', VerifyOTPController::class);
+  Route::post('/resend-otp', ResendOTPController::class);
+});
+
 Route::middleware('auth:sanctum')->group(function () {
-  
   Route::post('/logout', LogoutController::class);
   Route::get('/user', UserController::class);
 
   Route::put('/user/profile', [ProfileController::class, 'update']);
   Route::put('/user/password', [ProfileController::class, 'updatePassword']);
+  Route::put('/user/notification-preferences', [ProfileController::class, 'updateNotificationPreferences']);
   Route::post('/user/avatar', [ProfileController::class, 'uploadAvatar']);
 
   Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
