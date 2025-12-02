@@ -18,6 +18,7 @@ class UpdateCardRequest extends FormRequest
       'description' => ['nullable', 'string'],
       'assignee_id' => ['nullable', 'exists:users,id'],
       'due_date' => ['nullable', 'date'],
+      'is_completed' => ['sometimes', 'boolean'],
     ];
   }
 }

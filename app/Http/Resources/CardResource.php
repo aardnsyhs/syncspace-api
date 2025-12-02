@@ -18,6 +18,8 @@ class CardResource extends JsonResource
       'assignee_id' => $this->assignee_id,
       'assignee' => new UserResource($this->whenLoaded('assignee')),
       'due_date' => $this->due_date?->toDateString(),
+      'is_completed' => $this->is_completed,
+      'completed_at' => $this->completed_at?->toISOString(),
       'labels' => LabelResource::collection($this->whenLoaded('labels')),
       'comments_count' => $this->whenCounted('comments'),
       'created_at' => $this->created_at->toISOString(),

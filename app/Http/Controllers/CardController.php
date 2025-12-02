@@ -75,6 +75,11 @@ class CardController extends Controller
     $oldAssigneeId = $card->assignee_id;
     $changes = $request->validated();
 
+    // Handle is_completed timestamp
+    if (isset($changes['is_completed'])) {
+      $changes['completed_at'] = $changes['is_completed'] ? now() : null;
+    }
+
     $card->update($changes);
 
     $boardId = $card->column->board_id;
@@ -85,7 +90,7 @@ class CardController extends Controller
       $this->activityService->logCardAssigned($card, $request->user(), $card->assignee);
 
       if ($card->assignee_id && $card->assignee_id !== $request->user()->id) {
-        
+
         $this->notificationService->notifyCardAssigned($card, $card->assignee, $request->user());
 
         broadcast(new UserNotification(
@@ -150,7 +155,7 @@ class CardController extends Controller
       $newColumn = Column::find($newColumnId);
       if ($newColumn && $newColumn->wouldExceedWip()) {
         $wipExceeded = true;
-        
+
       }
     }
 

@@ -19,11 +19,15 @@ class Card extends Model
     'position',
     'assignee_id',
     'due_date',
+    'is_completed',
+    'completed_at',
   ];
 
   protected $casts = [
     'position' => 'integer',
     'due_date' => 'date',
+    'is_completed' => 'boolean',
+    'completed_at' => 'datetime',
   ];
 
   public function column(): BelongsTo
