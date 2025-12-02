@@ -146,6 +146,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
   Route::get('/cards/{card}/attachments', [AttachmentController::class, 'index']);
   Route::post('/cards/{card}/attachments', [AttachmentController::class, 'store']);
+  Route::get('/attachments/{attachment}/download', [AttachmentController::class, 'download']);
   Route::delete('/attachments/{attachment}', [AttachmentController::class, 'destroy']);
 
   Route::get('/board-templates', [BoardTemplateController::class, 'index']);

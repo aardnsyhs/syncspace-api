@@ -96,4 +96,19 @@ class AttachmentController extends Controller
 
     return response()->json(null, 204);
   }
+
+  public function download(Attachment $attachment)
+  {
+    $card = $attachment->card;
+    $board = $card->column->board;
+    $this->authorize('view', $board);
+
+    if ($attachment->is_external) {
+      return redirect($attachment->file_path);
+    }
+
+    $path = Storage::disk('public')->path($attachment->file_path);
+
+    return response()->download($path, $attachment->file_name);
+  }
 }
