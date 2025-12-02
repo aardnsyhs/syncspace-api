@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CardUpdated;
 use App\Models\Checklist;
 use App\Models\ChecklistItem;
 use App\Services\ActivityService;
@@ -31,12 +32,16 @@ class ChecklistItemController extends Controller
       'position' => $maxPosition + 1,
     ]);
 
+    $card = $checklist->card;
+    $boardId = $card->column->board_id;
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
+
     return response()->json(['data' => $item], 201);
   }
 
   public function update(Request $request, ChecklistItem $checklistItem): JsonResponse
   {
-    
+
     $checklistItem->load('checklist.card.column.board');
 
     $checklist = $checklistItem->checklist;
@@ -59,16 +64,19 @@ class ChecklistItemController extends Controller
     if (isset($validated['is_completed'])) {
       if ($validated['is_completed'] && !$wasCompleted) {
         $validated['completed_at'] = now();
-        
+
         $this->activityService->logChecklistItemCompleted($card, $request->user(), $checklist, $checklistItem);
       } elseif (!$validated['is_completed'] && $wasCompleted) {
         $validated['completed_at'] = null;
-        
+
         $this->activityService->logChecklistItemUncompleted($card, $request->user(), $checklist, $checklistItem);
       }
     }
 
     $checklistItem->update($validated);
+
+    $boardId = $board->id;
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
 
     return response()->json(['data' => $checklistItem]);
   }
@@ -81,10 +89,15 @@ class ChecklistItemController extends Controller
       return response()->json(['message' => 'Checklist or card not found'], 404);
     }
 
-    $board = $checklistItem->checklist->card->column->board;
+    $card = $checklistItem->checklist->card;
+    $board = $card->column->board;
     $this->authorize('editContent', $board);
 
+    $boardId = $board->id;
+
     $checklistItem->delete();
+
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
 
     return response()->json(null, 204);
   }

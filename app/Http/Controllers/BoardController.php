@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BoardCreated;
+use App\Events\BoardDeleted;
 use App\Events\BoardUpdated;
 use App\Http\Requests\Board\StoreBoardRequest;
 use App\Http\Requests\Board\UpdateBoardRequest;
@@ -36,6 +38,8 @@ class BoardController extends Controller
         'position' => $index,
       ]);
     }
+
+    broadcast(new BoardCreated($board))->toOthers();
 
     return response()->json([
       'data' => new BoardResource($board->load('columns')),
@@ -74,7 +78,12 @@ class BoardController extends Controller
   {
     $this->authorize('delete', $board);
 
+    $teamId = $board->team_id;
+    $boardId = $board->id;
+
     $board->delete();
+
+    broadcast(new BoardDeleted($teamId, $boardId))->toOthers();
 
     return response()->json(null, 204);
   }

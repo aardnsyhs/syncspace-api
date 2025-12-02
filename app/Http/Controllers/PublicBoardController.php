@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BoardUpdated;
 use App\Models\Board;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PublicBoardController extends Controller
 {
-
   public function enable(Request $request, Board $board): JsonResponse
   {
     $this->authorize('update', $board);
 
     $board->enablePublicSharing();
+
+    broadcast(new BoardUpdated($board))->toOthers();
 
     return response()->json([
       'data' => [
@@ -31,6 +33,8 @@ class PublicBoardController extends Controller
 
     $board->disablePublicSharing();
 
+    broadcast(new BoardUpdated($board))->toOthers();
+
     return response()->json([
       'data' => [
         'is_public' => false,
@@ -44,6 +48,8 @@ class PublicBoardController extends Controller
     $this->authorize('update', $board);
 
     $board->regeneratePublicToken();
+
+    broadcast(new BoardUpdated($board))->toOthers();
 
     return response()->json([
       'data' => [
@@ -101,7 +107,7 @@ class PublicBoardController extends Controller
             'color' => $label->color,
           ]),
           'checklist_progress' => $this->getChecklistProgress($card),
-          
+
         ]),
       ]),
       'labels' => $board->labels->map(fn($label) => [

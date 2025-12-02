@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TeamRole;
+use App\Events\TeamMemberAdded;
+use App\Events\TeamMemberRemoved;
+use App\Events\TeamMemberUpdated;
 use App\Http\Resources\UserResource;
 use App\Models\Team;
 use App\Models\User;
@@ -62,6 +65,8 @@ class TeamMemberController extends Controller
       $user->notify(new TeamInvitationNotification($team, $request->user(), $requestedRole));
     }
 
+    broadcast(new TeamMemberAdded($team->id, $user, $requestedRole))->toOthers();
+
     return response()->json([
       'message' => 'Member added successfully. An invitation email has been sent.',
       'data' => new UserResource($user),
@@ -100,7 +105,7 @@ class TeamMemberController extends Controller
       }
 
       if ($newRole === TeamRole::OWNER) {
-        
+
         $team->members()->updateExistingPivot($request->user()->id, ['role' => 'admin']);
         $team->update(['owner_id' => $user->id]);
       }
@@ -113,6 +118,8 @@ class TeamMemberController extends Controller
     }
 
     $team->members()->updateExistingPivot($user->id, ['role' => $newRole->value]);
+
+    broadcast(new TeamMemberUpdated($team->id, $user, $newRole->value))->toOthers();
 
     return response()->json([
       'message' => 'Role updated successfully.',
@@ -147,10 +154,13 @@ class TeamMemberController extends Controller
 
     if ($user->id === $request->user()->id) {
       $team->members()->detach($user->id);
+      broadcast(new TeamMemberRemoved($team->id, $user->id))->toOthers();
       return response()->json(null, 204);
     }
 
     $team->members()->detach($user->id);
+
+    broadcast(new TeamMemberRemoved($team->id, $user->id))->toOthers();
 
     return response()->json(null, 204);
   }

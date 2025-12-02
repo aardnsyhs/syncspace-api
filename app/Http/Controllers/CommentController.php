@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\CommentCreated;
+use App\Events\CommentDeleted;
 use App\Events\UserNotification;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Http\Resources\CommentResource;
@@ -72,7 +73,7 @@ class CommentController extends Controller
 
   private function notifyMentionedUsers(Comment $comment, Card $card, User $commenter, int $boardId): void
   {
-    
+
     $teamId = $card->column->board->team_id;
     $teamMembers = User::whereHas('teams', function ($query) use ($teamId) {
       $query->where('teams.id', $teamId);
@@ -82,7 +83,7 @@ class CommentController extends Controller
     $commentBody = $comment->body;
 
     foreach ($teamMembers as $member) {
-      
+
       if ($member->id === $commenter->id) {
         continue;
       }
@@ -125,7 +126,14 @@ class CommentController extends Controller
   {
     $this->authorize('delete', $comment);
 
+    $card = $comment->card;
+    $boardId = $card->column->board_id;
+    $commentId = $comment->id;
+    $cardId = $card->id;
+
     $comment->delete();
+
+    broadcast(new CommentDeleted($boardId, $cardId, $commentId))->toOthers();
 
     return response()->json(null, 204);
   }

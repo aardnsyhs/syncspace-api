@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CardUpdated;
 use App\Models\Card;
 use App\Models\Checklist;
 use App\Services\ActivityService;
@@ -48,6 +49,9 @@ class ChecklistController extends Controller
 
     $this->activityService->logChecklistAdded($card, $request->user(), $checklist);
 
+    $boardId = $card->column->board_id;
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
+
     return response()->json([
       'data' => $checklist->load('items'),
     ], 201);
@@ -65,6 +69,10 @@ class ChecklistController extends Controller
 
     $checklist->update($validated);
 
+    $card = $checklist->card;
+    $boardId = $card->column->board_id;
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
+
     return response()->json([
       'data' => $checklist->load('items'),
     ]);
@@ -77,9 +85,13 @@ class ChecklistController extends Controller
     $this->authorize('editContent', $board);
 
     $checklistTitle = $checklist->title;
+    $boardId = $board->id;
+
     $checklist->delete();
 
     $this->activityService->logChecklistRemoved($card, $request->user(), $checklistTitle);
+
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
 
     return response()->json(null, 204);
   }

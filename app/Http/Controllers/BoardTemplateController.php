@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BoardCreated;
 use App\Models\Board;
 use App\Models\BoardTemplate;
 use App\Models\Team;
@@ -22,7 +23,7 @@ class BoardTemplateController extends Controller
         $query->where('visibility', 'global')
           ->orWhereIn('team_id', $teamIds);
       })
-      ->orderBy('visibility') 
+      ->orderBy('visibility')
       ->orderBy('name')
       ->get();
 
@@ -67,7 +68,7 @@ class BoardTemplateController extends Controller
     $template->save();
 
     if (!empty($validated['board_id'])) {
-      
+
       $board = Board::with('columns.cards')->findOrFail($validated['board_id']);
 
       $this->authorize('view', $board);
@@ -88,7 +89,7 @@ class BoardTemplateController extends Controller
         }
       }
     } else {
-      
+
       foreach ($validated['columns'] as $index => $columnData) {
         $template->columns()->create([
           'name' => $columnData['name'],
@@ -165,6 +166,8 @@ class BoardTemplateController extends Controller
     }
 
     $board->load('columns.cards');
+
+    broadcast(new BoardCreated($board))->toOthers();
 
     return response()->json([
       'data' => $board,

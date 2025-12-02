@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TeamDeleted;
+use App\Events\TeamUpdated;
 use App\Http\Requests\Team\StoreTeamRequest;
 use App\Http\Requests\Team\UpdateTeamRequest;
 use App\Http\Resources\TeamResource;
@@ -71,6 +73,8 @@ class TeamController extends Controller
 
     $team->update($request->validated());
 
+    broadcast(new TeamUpdated($team))->toOthers();
+
     return response()->json([
       'data' => new TeamResource($team),
     ]);
@@ -80,7 +84,11 @@ class TeamController extends Controller
   {
     $this->authorize('delete', $team);
 
+    $teamId = $team->id;
+
     $team->delete();
+
+    broadcast(new TeamDeleted($teamId))->toOthers();
 
     return response()->json(null, 204);
   }

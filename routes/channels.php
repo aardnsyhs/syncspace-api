@@ -31,3 +31,13 @@ Broadcast::channel('presence-board.{boardId}', function (User $user, int $boardI
     'avatar_url' => $user->avatar_url,
   ];
 });
+
+Broadcast::channel('team.{teamId}', function (User $user, int $teamId) {
+  $team = \App\Models\Team::find($teamId);
+
+  if (!$team) {
+    return false;
+  }
+
+  return $team->hasMember($user);
+});

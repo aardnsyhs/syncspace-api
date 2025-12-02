@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CardUpdated;
 use App\Models\Attachment;
 use App\Models\Card;
 use App\Services\ActivityService;
@@ -32,7 +33,7 @@ class AttachmentController extends Controller
     $this->authorize('editContent', $board);
 
     $validated = $request->validate([
-      'file' => 'required_without:url|file|max:10240', 
+      'file' => 'required_without:url|file|max:10240',
       'url' => 'required_without:file|url|max:2048',
       'file_name' => 'required_with:url|string|max:255',
     ]);
@@ -40,7 +41,7 @@ class AttachmentController extends Controller
     $user = $request->user();
 
     if ($request->hasFile('file')) {
-      
+
       $file = $request->file('file');
       $path = $file->store('attachments/' . $card->id, 'public');
 
@@ -53,7 +54,7 @@ class AttachmentController extends Controller
         'uploaded_by' => $user->id,
       ]);
     } else {
-      
+
       $attachment = $card->attachments()->create([
         'file_name' => $validated['file_name'],
         'file_path' => $validated['url'],
@@ -65,6 +66,9 @@ class AttachmentController extends Controller
     }
 
     $this->activityService->logAttachmentAdded($card, $user, $attachment);
+
+    $boardId = $board->id;
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
 
     $attachment->load('uploader:id,name,avatar_url');
 
@@ -78,6 +82,7 @@ class AttachmentController extends Controller
     $this->authorize('editContent', $board);
 
     $fileName = $attachment->file_name;
+    $boardId = $board->id;
 
     if (!$attachment->is_external && $attachment->file_path) {
       Storage::disk('public')->delete($attachment->file_path);
@@ -86,6 +91,8 @@ class AttachmentController extends Controller
     $attachment->delete();
 
     $this->activityService->logAttachmentRemoved($card, $request->user(), $fileName);
+
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
 
     return response()->json(null, 204);
   }

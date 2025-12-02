@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CardUpdated;
 use App\Models\Card;
 use App\Models\Label;
 use App\Services\ActivityService;
@@ -36,6 +37,9 @@ class CardLabelController extends Controller
       $this->activityService->logLabelAdded($card, $user, $label);
     }
 
+    $boardId = $board->id;
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
+
     return response()->json([
       'data' => $card->load('labels'),
     ]);
@@ -49,6 +53,9 @@ class CardLabelController extends Controller
     $card->labels()->detach($label->id);
 
     $this->activityService->logLabelRemoved($card, $request->user(), $label);
+
+    $boardId = $board->id;
+    broadcast(new CardUpdated($card, $boardId))->toOthers();
 
     return response()->json(null, 204);
   }

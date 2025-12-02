@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LabelCreated;
+use App\Events\LabelDeleted;
+use App\Events\LabelUpdated;
 use App\Models\Board;
 use App\Models\Label;
 use Illuminate\Http\JsonResponse;
@@ -9,7 +12,6 @@ use Illuminate\Http\Request;
 
 class BoardLabelController extends Controller
 {
-
   public function index(Board $board): JsonResponse
   {
     $this->authorize('view', $board);
@@ -30,6 +32,8 @@ class BoardLabelController extends Controller
 
     $label = $board->labels()->create($validated);
 
+    broadcast(new LabelCreated($label, $board->id))->toOthers();
+
     return response()->json(['data' => $label], 201);
   }
 
@@ -48,6 +52,8 @@ class BoardLabelController extends Controller
 
     $label->update($validated);
 
+    broadcast(new LabelUpdated($label, $board->id))->toOthers();
+
     return response()->json(['data' => $label]);
   }
 
@@ -59,7 +65,11 @@ class BoardLabelController extends Controller
       abort(404);
     }
 
+    $labelId = $label->id;
+
     $label->delete();
+
+    broadcast(new LabelDeleted($board->id, $labelId))->toOthers();
 
     return response()->json(null, 204);
   }
