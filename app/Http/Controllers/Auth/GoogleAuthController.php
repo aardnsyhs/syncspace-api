@@ -8,26 +8,13 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Laravel\Socialite\Facades\Socialite;
 
 class GoogleAuthController extends Controller
 {
   /**
-   * Redirect to Google OAuth
-   */
-  public function redirect(): JsonResponse
-  {
-    $url = Socialite::driver('google')
-      ->stateless()
-      ->redirect()
-      ->getTargetUrl();
-
-    return response()->json(['url' => $url]);
-  }
-
-  /**
-   * Handle Google OAuth callback
+   * Handle Google OAuth callback - exchange code for user info
    */
   public function callback(Request $request): JsonResponse
   {
@@ -36,30 +23,53 @@ class GoogleAuthController extends Controller
     ]);
 
     try {
-      $googleUser = Socialite::driver('google')
-        ->stateless()
-        ->user();
+      $tokenResponse = Http::asForm()->post('https://oauth2.googleapis.com/token', [
+        'code' => $request->code,
+        'client_id' => config('services.google.client_id'),
+        'client_secret' => config('services.google.client_secret'),
+        'redirect_uri' => config('services.google.redirect'),
+        'grant_type' => 'authorization_code',
+      ]);
+
+      if (!$tokenResponse->successful()) {
+        return response()->json([
+          'message' => 'Failed to exchange authorization code.',
+        ], 401);
+      }
+
+      $accessToken = $tokenResponse->json('access_token');
+
+      $userResponse = Http::withToken($accessToken)
+        ->get('https://www.googleapis.com/oauth2/v2/userinfo');
+
+      if (!$userResponse->successful()) {
+        return response()->json([
+          'message' => 'Failed to get user information from Google.',
+        ], 401);
+      }
+
+      $googleUser = $userResponse->json();
     } catch (\Exception $e) {
       return response()->json([
-        'message' => 'Invalid Google authentication code.',
+        'message' => 'Google authentication failed.',
       ], 401);
     }
 
-    $user = User::where('email', $googleUser->getEmail())->first();
+    $user = User::where('email', $googleUser['email'])->first();
 
     if ($user) {
       if (!$user->google_id) {
         $user->update([
-          'google_id' => $googleUser->getId(),
-          'avatar_url' => $user->avatar_url ?? $googleUser->getAvatar(),
+          'google_id' => $googleUser['id'],
+          'avatar_url' => $user->avatar_url ?? $googleUser['picture'] ?? null,
         ]);
       }
     } else {
       $user = User::create([
-        'name' => $googleUser->getName(),
-        'email' => $googleUser->getEmail(),
-        'google_id' => $googleUser->getId(),
-        'avatar_url' => $googleUser->getAvatar(),
+        'name' => $googleUser['name'],
+        'email' => $googleUser['email'],
+        'google_id' => $googleUser['id'],
+        'avatar_url' => $googleUser['picture'] ?? null,
         'password' => Hash::make(Str::random(24)),
         'email_verified_at' => now(),
       ]);

@@ -67,7 +67,6 @@ Route::middleware('throttle:auth')->group(function () {
   Route::post('/verify-otp', VerifyOTPController::class);
   Route::post('/resend-otp', ResendOTPController::class);
 
-  Route::get('/auth/google', [GoogleAuthController::class, 'redirect']);
   Route::post('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 });
 
