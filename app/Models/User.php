@@ -12,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-  
+
   use HasFactory, Notifiable, HasApiTokens;
 
   protected $fillable = [
@@ -22,6 +22,8 @@ class User extends Authenticatable
     'avatar_url',
     'email_notifications',
     'desktop_notifications',
+    'google_id',
+    'email_verified_at',
   ];
 
   protected $hidden = [
