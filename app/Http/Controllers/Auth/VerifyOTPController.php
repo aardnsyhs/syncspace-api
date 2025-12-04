@@ -6,12 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\EmailVerification;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class VerifyOTPController extends Controller
 {
+  public function __construct(
+    private UserService $userService
+  ) {
+  }
+
   public function __invoke(Request $request): JsonResponse
   {
     $request->validate([
@@ -41,6 +47,8 @@ class VerifyOTPController extends Controller
     $user = User::where('email', $request->email)->first();
     $user->email_verified_at = now();
     $user->save();
+
+    $this->userService->ensureHasWorkspace($user);
 
     $token = $user->createToken('auth-token')->plainTextToken;
 

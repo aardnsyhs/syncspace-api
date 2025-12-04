@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +14,11 @@ use Illuminate\Support\Str;
 
 class GoogleAuthController extends Controller
 {
+  public function __construct(
+    private UserService $userService
+  ) {
+  }
+
   /**
    * Handle Google OAuth callback - exchange code for user info
    */
@@ -72,6 +78,8 @@ class GoogleAuthController extends Controller
         'password' => Hash::make(Str::random(24)),
         'email_verified_at' => now(),
       ]);
+
+      $this->userService->createPersonalWorkspace($user);
     }
 
     $token = $user->createToken('auth-token')->plainTextToken;
