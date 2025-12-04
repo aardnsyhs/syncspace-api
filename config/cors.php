@@ -8,7 +8,9 @@ return [
 
   'allowed_origins' => array_filter([
     env('FRONTEND_URL', 'http://localhost:5173'),
-    env('FRONTEND_URL_PROD'), 
+    env('FRONTEND_URL_PROD'),
+    'http://localhost:5173',
+    'http://syncspace.test:5173',
   ]),
 
   'allowed_origins_patterns' => [],
@@ -24,7 +26,7 @@ return [
 
   'exposed_headers' => [],
 
-  'max_age' => 7200, 
+  'max_age' => 7200,
 
   'supports_credentials' => true,
 
