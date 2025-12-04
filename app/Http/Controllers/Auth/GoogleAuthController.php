@@ -32,15 +32,8 @@ class GoogleAuthController extends Controller
       ]);
 
       if (!$tokenResponse->successful()) {
-        \Log::error('Google OAuth token exchange failed', [
-          'status' => $tokenResponse->status(),
-          'response' => $tokenResponse->json(),
-          'redirect_uri' => config('services.google.redirect'),
-        ]);
-
         return response()->json([
           'message' => 'Failed to exchange authorization code.',
-          'debug' => app()->isLocal() ? $tokenResponse->json() : null,
         ], 401);
       }
 
@@ -66,10 +59,9 @@ class GoogleAuthController extends Controller
 
     if ($user) {
       if (!$user->google_id) {
-        $user->update([
-          'google_id' => $googleUser['id'],
-          'avatar_url' => $user->avatar_url ?? $googleUser['picture'] ?? null,
-        ]);
+        return response()->json([
+          'message' => 'This email is already registered. Please login with your password instead.',
+        ], 409);
       }
     } else {
       $user = User::create([
