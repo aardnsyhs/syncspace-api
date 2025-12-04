@@ -32,8 +32,15 @@ class GoogleAuthController extends Controller
       ]);
 
       if (!$tokenResponse->successful()) {
+        \Log::error('Google OAuth token exchange failed', [
+          'status' => $tokenResponse->status(),
+          'response' => $tokenResponse->json(),
+          'redirect_uri' => config('services.google.redirect'),
+        ]);
+
         return response()->json([
           'message' => 'Failed to exchange authorization code.',
+          'debug' => app()->isLocal() ? $tokenResponse->json() : null,
         ], 401);
       }
 
