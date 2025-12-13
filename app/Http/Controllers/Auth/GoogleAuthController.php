@@ -69,6 +69,8 @@ class GoogleAuthController extends Controller
           'message' => 'This email is already registered. Please login with your password instead.',
         ], 409);
       }
+
+      $this->userService->ensureHasWorkspace($user);
     } else {
       $user = User::create([
         'name' => $googleUser['name'],

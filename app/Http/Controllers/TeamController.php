@@ -8,6 +8,7 @@ use App\Http\Requests\Team\StoreTeamRequest;
 use App\Http\Requests\Team\UpdateTeamRequest;
 use App\Http\Resources\TeamResource;
 use App\Models\Team;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -15,9 +16,18 @@ use Illuminate\Support\Str;
 
 class TeamController extends Controller
 {
+  public function __construct(
+    private UserService $userService
+  ) {
+  }
+
   public function index(Request $request): AnonymousResourceCollection
   {
-    $teams = $request->user()
+    $user = $request->user();
+
+    $this->userService->ensureHasWorkspace($user);
+
+    $teams = $user
       ->teams()
       ->with([
         'boards' => function ($query) {

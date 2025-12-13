@@ -6,12 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
+  public function __construct(
+    private UserService $userService
+  ) {
+  }
+
   public function __invoke(LoginRequest $request): JsonResponse
   {
     $user = User::where('email', $request->email)->first();
@@ -29,6 +35,9 @@ class LoginController extends Controller
     }
 
     $user = Auth::user();
+
+    $this->userService->ensureHasWorkspace($user);
+
     $token = $user->createToken('auth-token')->plainTextToken;
 
     return response()->json([
