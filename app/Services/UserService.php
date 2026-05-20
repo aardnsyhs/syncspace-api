@@ -9,12 +9,14 @@ use Illuminate\Support\Str;
 class UserService
 {
   /**
-   * Create a personal workspace for a new user
+   * Create a personal workspace for a new user.
+   * The workspace name is configurable via config/workspace.php → default_workspace_name
+   * or the APP_DEFAULT_WORKSPACE_NAME environment variable.
    */
   public function createPersonalWorkspace(User $user): Team
   {
     $team = Team::create([
-      'name' => 'Personal Workspace',
+      'name' => config('workspace.default_workspace_name', 'Personal Workspace'),
       'slug' => 'personal-' . Str::slug($user->name) . '-' . Str::random(5),
       'owner_id' => $user->id,
     ]);

@@ -1,11 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "saas-boilerplate-api",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "High-Ticket SaaS Boilerplate — Laravel 12 API backend with real-time collaboration, multi-tenant workspaces, and role-based access control.",
     "keywords": [
         "laravel",
-        "framework"
+        "saas",
+        "boilerplate",
+        "kanban",
+        "realtime"
     ],
     "license": "MIT",
     "require": {

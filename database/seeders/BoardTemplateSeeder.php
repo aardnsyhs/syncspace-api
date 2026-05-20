@@ -10,10 +10,15 @@ class BoardTemplateSeeder extends Seeder
 {
   public function run(): void
   {
-    
+    // The system user owns global board templates.
+    // Configure via SYSTEM_USER_EMAIL and SYSTEM_USER_NAME in your .env file,
+    // or edit config/workspace.php to change the defaults.
     $systemUser = User::firstOrCreate(
-      ['email' => 'system@syncspace.app'],
-      ['name' => 'Syncspace', 'password' => bcrypt('system')]
+      ['email' => config('workspace.system_user_email', 'system@example.com')],
+      [
+        'name'     => config('workspace.system_user_name', 'System'),
+        'password' => bcrypt(str()->random(32)),
+      ]
     );
 
     $templates = [

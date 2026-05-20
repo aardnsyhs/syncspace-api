@@ -10,7 +10,7 @@ return [
     env('FRONTEND_URL', 'http://localhost:5173'),
     env('FRONTEND_URL_PROD'),
     'http://localhost:5173',
-    'http://syncspace.test:5173',
+    'http://localhost:3000',
   ]),
 
   'allowed_origins_patterns' => [],

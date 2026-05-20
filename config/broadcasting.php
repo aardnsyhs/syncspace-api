@@ -2,7 +2,23 @@
 
 return [
 
-  'default' => env('BROADCAST_CONNECTION', 'ably'),
+  /*
+    |--------------------------------------------------------------------------
+    | Default Broadcaster
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default broadcaster that will be used by the
+    | framework when an event needs to be broadcast. You may set this to
+    | any of the connections defined in the "connections" array below.
+    |
+    | Supported: "reverb", "ably", "pusher", "log", "null"
+    |
+    | For local development, "reverb" is recommended (free, self-hosted).
+    | For production, "ably" or "pusher" are managed cloud options.
+    | Set BROADCAST_CONNECTION in your .env to switch between them.
+    |
+    */
+  'default' => env('BROADCAST_CONNECTION', 'reverb'),
 
   'connections' => [
 
@@ -18,7 +34,7 @@ return [
         'useTLS' => env('REVERB_SCHEME', 'http') === 'https',
       ],
       'client_options' => [
-        
+
       ],
     ],
 

@@ -31,7 +31,8 @@ class BoardController extends Controller
 
     $board = $team->boards()->create($request->validated());
 
-    $defaultColumns = ['To Do', 'In Progress', 'Review', 'Done'];
+    // Default columns are configurable via config/board.php → default_columns
+    $defaultColumns = config('board.default_columns', ['To Do', 'In Progress', 'Review', 'Done']);
     foreach ($defaultColumns as $index => $name) {
       $board->columns()->create([
         'name' => $name,

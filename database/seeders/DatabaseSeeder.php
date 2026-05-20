@@ -15,60 +15,72 @@ class DatabaseSeeder extends Seeder
 {
   public function run(): void
   {
-    
+    // -----------------------------------------------------------------------
+    // Demo Users
+    // Four users covering every role tier so buyers can test permissions
+    // immediately after setup. Credentials are printed to the console below.
+    // -----------------------------------------------------------------------
     $owner = User::factory()->create([
-      'name' => 'John Doe (Owner)',
-      'email' => 'owner@example.com',
+      'name'     => 'Demo Owner',
+      'email'    => 'owner@demo.com',
       'password' => bcrypt('password'),
     ]);
 
     $admin = User::factory()->create([
-      'name' => 'Jane Smith (Admin)',
-      'email' => 'admin@example.com',
+      'name'     => 'Demo Admin',
+      'email'    => 'admin@demo.com',
       'password' => bcrypt('password'),
     ]);
 
     $member = User::factory()->create([
-      'name' => 'Bob Wilson (Member)',
-      'email' => 'member@example.com',
+      'name'     => 'Demo Member',
+      'email'    => 'member@demo.com',
       'password' => bcrypt('password'),
     ]);
 
     $viewer = User::factory()->create([
-      'name' => 'Alice Brown (Viewer)',
-      'email' => 'viewer@example.com',
+      'name'     => 'Demo Viewer',
+      'email'    => 'viewer@demo.com',
       'password' => bcrypt('password'),
     ]);
 
+    // -----------------------------------------------------------------------
+    // Demo Workspace (Team)
+    // -----------------------------------------------------------------------
     $team = Team::factory()->create([
-      'name' => 'Acme Corp',
-      'slug' => 'acme-corp',
+      'name'     => 'Demo Workspace',
+      'slug'     => 'demo-workspace',
       'owner_id' => $owner->id,
     ]);
 
-    $team->members()->attach($owner->id, ['role' => 'owner']);
-    $team->members()->attach($admin->id, ['role' => 'admin']);
+    $team->members()->attach($owner->id,  ['role' => 'owner']);
+    $team->members()->attach($admin->id,  ['role' => 'admin']);
     $team->members()->attach($member->id, ['role' => 'member']);
     $team->members()->attach($viewer->id, ['role' => 'viewer']);
 
+    // -----------------------------------------------------------------------
+    // Demo Board — uses the configurable default columns from config/board.php
+    // -----------------------------------------------------------------------
     $board = Board::factory()->create([
-      'team_id' => $team->id,
-      'name' => 'Project Alpha',
-      'description' => 'Main project board for tracking tasks',
-      'color' => '#3b82f6',
+      'team_id'     => $team->id,
+      'name'        => 'Sample Project Board',
+      'description' => 'A demo board to explore the boilerplate features.',
+      'color'       => '#3b82f6',
     ]);
 
+    // Labels — generic enough to apply to any project type
     $labels = collect([
-      ['name' => 'Bug', 'color' => '#ef4444'],
-      ['name' => 'Feature', 'color' => '#3b82f6'],
+      ['name' => 'Bug',         'color' => '#ef4444'],
+      ['name' => 'Feature',     'color' => '#3b82f6'],
       ['name' => 'Enhancement', 'color' => '#8b5cf6'],
-      ['name' => 'Urgent', 'color' => '#f97316'],
+      ['name' => 'Urgent',      'color' => '#f97316'],
     ])->map(fn($label) => Label::create([...$label, 'board_id' => $board->id]));
 
-    $columnNames = ['To Do', 'In Progress', 'Review', 'Done'];
+    // Columns — pulled from config so they stay in sync with BoardController
+    $columnNames = config('board.default_columns', ['To Do', 'In Progress', 'Review', 'Done']);
     $columns = collect($columnNames)->map(fn($name, $index) => Column::create([
       'board_id' => $board->id,
-      'name' => $name,
+      'name'     => $name,
       'position' => $index,
     ]));
 
@@ -85,8 +97,8 @@ class DatabaseSeeder extends Seeder
 
       for ($i = 0; $i < $cardCount; $i++) {
         $card = Card::factory()->create([
-          'column_id' => $column->id,
-          'position' => $i,
+          'column_id'   => $column->id,
+          'position'    => $i,
           'assignee_id' => fake()->optional(0.7)->randomElement(
             array_map(fn($u) => $u->id, $allMembers)
           ),
@@ -107,20 +119,26 @@ class DatabaseSeeder extends Seeder
       }
     });
 
+    // A second board to demonstrate multi-board workspaces
     Board::factory()->create([
       'team_id' => $team->id,
-      'name' => 'Marketing Campaign',
-      'color' => '#10b981',
+      'name'    => 'Second Sample Board',
+      'color'   => '#10b981',
     ]);
 
-    $this->command->info('Demo users created:');
+    // -----------------------------------------------------------------------
+    // Console output — credentials table for quick reference after seeding
+    // -----------------------------------------------------------------------
+    $this->command->info('');
+    $this->command->info('✅ Demo data seeded successfully.');
+    $this->command->info('');
     $this->command->table(
-      ['Email', 'Password', 'Role'],
+      ['Role', 'Email', 'Password'],
       [
-        ['owner@example.com', 'password', 'Owner'],
-        ['admin@example.com', 'password', 'Admin'],
-        ['member@example.com', 'password', 'Member'],
-        ['viewer@example.com', 'password', 'Viewer'],
+        ['Owner',  'owner@demo.com',  'password'],
+        ['Admin',  'admin@demo.com',  'password'],
+        ['Member', 'member@demo.com', 'password'],
+        ['Viewer', 'viewer@demo.com', 'password'],
       ]
     );
   }

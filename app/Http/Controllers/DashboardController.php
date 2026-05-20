@@ -33,14 +33,12 @@ class DashboardController extends Controller
       ->where('due_date', '<=', Carbon::now()->addDays(7))
       ->count();
 
-    $completedCards = Card::whereHas('column', function ($q) use ($boardIds) {
-      $q->whereIn('board_id', $boardIds)
-        ->where(function ($q2) {
-          $q2->where('name', 'like', '%done%')
-            ->orWhere('name', 'like', '%complete%')
-            ->orWhere('name', 'like', '%finished%');
-        });
-    })->count();
+    // Use the is_completed flag for accurate completion tracking.
+    // This is more reliable than matching column names, which can vary per board.
+    $completedCards = Card::where('is_completed', true)
+      ->whereHas('column', function ($q) use ($boardIds) {
+        $q->whereIn('board_id', $boardIds);
+      })->count();
 
     return response()->json([
       'data' => [
