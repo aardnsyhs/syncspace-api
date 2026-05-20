@@ -11,10 +11,7 @@ class ActivityController extends Controller
 {
   public function index(Request $request, Board $board): AnonymousResourceCollection
   {
-    
-    if (!$board->team->hasMember($request->user())) {
-      abort(403, 'You are not a member of this team.');
-    }
+    $this->authorize('view', $board);
 
     $activities = $board->activities()
       ->with('user')
