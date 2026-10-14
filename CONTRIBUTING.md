@@ -1,6 +1,6 @@
 # Contributing to the SyncSpace API
 
-Read the [README](README.md), [architecture](docs/ARCHITECTURE.md), [configuration](docs/CONFIGURATION.md), and [testing guide](docs/DEVELOPMENT.md). License ownership still requires maintainer confirmation. Private vulnerability reporting is enabled; [SECURITY.md](SECURITY.md) explains how to use it. The shared [Phase 1 report](https://github.com/aardnsyhs/syncspace/blob/master/docs/OSS_GOVERNANCE_PHASE1.md) records the current governance review.
+Read the [README](README.md), [architecture](docs/ARCHITECTURE.md), [configuration](docs/CONFIGURATION.md), and [testing guide](docs/DEVELOPMENT.md). Original first-party code is covered by [LICENSE](LICENSE); third-party material retains its own terms, as recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Private vulnerability reporting is enabled; [SECURITY.md](SECURITY.md) explains how to use it. The shared [Phase 1 report](https://github.com/aardnsyhs/syncspace/blob/master/docs/OSS_GOVERNANCE_PHASE1.md) records current decisions and restrictions.
 
 ## Local workflow
 
@@ -39,7 +39,7 @@ Bug reports should include the endpoint/workflow, expected and observed behavior
 
 Keep pull requests focused. Explain the resulting behavior, validation, documentation changes, and any matching frontend work. Discuss breaking API/schema changes with the maintainer before implementation and provide a compatibility/deployment plan.
 
-No review SLA, release cadence, CLA, or contributor approval policy is established in tracked files. Maintainers decide merges and may request changes. Be respectful and support technical claims with evidence. Use [SECURITY.md](SECURITY.md) for vulnerabilities.
+The maintainer is responsible for issue triage, PR review, merge decisions, releases, and security reporting. Review may require changes; no response-time SLA is promised. No mandatory CLA is introduced. Be respectful and support technical claims with evidence. Use [SECURITY.md](SECURITY.md) for vulnerabilities.
 
 ## Triage, scope, and attribution
 
@@ -51,4 +51,4 @@ Preserve accurate author metadata and upstream notices. Credit collaborators onl
 
 ## Maintenance and releases
 
-No supported release series or backport commitment has been adopted. The default API branch is `main`; that is repository configuration, not a support guarantee. The shared [maintenance proposal](https://github.com/aardnsyhs/syncspace/blob/master/docs/OSS_GOVERNANCE_PHASE1.md#governance-improvements) recommends a reviewed default-branch baseline, explicit support scope, versioned releases, and coordinated client/API release notes. It remains a proposal until the maintainer approves it.
+The maintained API development branch is `main`. No historical release or backport commitment is implied. Future releases follow Semantic Versioning and document compatible client/API versions, API/event/schema changes, and upgrade steps. Releases occur when reviewed and verified changes are ready, without a fixed schedule. See the adopted [maintenance policy](https://github.com/aardnsyhs/syncspace/blob/master/docs/OSS_GOVERNANCE_PHASE1.md#governance-improvements).

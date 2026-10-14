@@ -76,4 +76,4 @@ For CORS, mail, database, and permission issues, follow [development and trouble
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md). [renovate.json](renovate.json) is the existing dependency automation configuration.
 
-`composer.json` declares MIT, but no LICENSE file or project copyright notice establishes the intended grant and ownership. Licensing remains blocked pending maintainer confirmation. The audit compares MIT and Apache-2.0 without applying either license.
+Original first-party application code is licensed under the [MIT License](LICENSE), copyright Ardiansyah Sulistyo, 2025-2026. The existing MIT declaration in `composer.json` is unchanged. Laravel-derived templates and other dependencies retain their upstream terms; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). The shared [Phase 1 governance report](https://github.com/aardnsyhs/syncspace/blob/master/docs/OSS_GOVERNANCE_PHASE1.md) records maintainer authorization, notice coverage, and remaining application-wide redistribution restrictions.

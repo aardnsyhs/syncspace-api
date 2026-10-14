@@ -11,6 +11,7 @@ return [
     env('FRONTEND_URL_PROD'),
     'http://localhost:5173',
     'http://localhost:3000',
+    env('APP_ENV') === 'local' ? 'http://syncspace.test:5173' : null,
   ]),
 
   'allowed_origins_patterns' => [],

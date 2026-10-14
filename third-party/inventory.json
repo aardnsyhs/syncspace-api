@@ -1,0 +1,1535 @@
+{
+  "review_date": "2026-10-14",
+  "coverage": "package-level notice inventory; does not grant rights to excluded artwork or clear every embedded component",
+  "entries": [
+    {
+      "name": "ably/ably-php",
+      "version": "1.1.11",
+      "declared_license": [
+        "Apache-2.0"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/9acb6a8eacce798a9dfa1644d4c7562b1d6f65bed9c014900460b3e7290e5aee.txt",
+          "sha256": "9acb6a8eacce798a9dfa1644d4c7562b1d6f65bed9c014900460b3e7290e5aee",
+          "source": "vendor/ably/ably-php/COPYRIGHT"
+        },
+        {
+          "path": "third-party/licenses/a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9.txt",
+          "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+          "source": "vendor/ably/ably-php/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "brick/math",
+      "version": "0.14.8",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/d2625cc652e6ffa9f16827f1dba2d83ac12b050dc8150a38720420dbb810cae3.txt",
+          "sha256": "d2625cc652e6ffa9f16827f1dba2d83ac12b050dc8150a38720420dbb810cae3",
+          "source": "vendor/brick/math/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "carbonphp/carbon-doctrine-types",
+      "version": "3.2.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/cf9aa3a6374d6e4a4f0f886c484426200f83f2d05fedc1b66e09a3b74c05e5ea.txt",
+          "sha256": "cf9aa3a6374d6e4a4f0f886c484426200f83f2d05fedc1b66e09a3b74c05e5ea",
+          "source": "vendor/carbonphp/carbon-doctrine-types/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "clue/redis-protocol",
+      "version": "v0.3.2",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/c7855d9a7c3bd109a90f6d6f37280810ce00d44258522cc9dac17e1343435e01.txt",
+          "sha256": "c7855d9a7c3bd109a90f6d6f37280810ce00d44258522cc9dac17e1343435e01",
+          "source": "vendor/clue/redis-protocol/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "clue/redis-react",
+      "version": "v2.8.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/8a5bf0423787ee06d568b8fbedf4e260766453b302baaa727ad05ee62f68e830.txt",
+          "sha256": "8a5bf0423787ee06d568b8fbedf4e260766453b302baaa727ad05ee62f68e830",
+          "source": "vendor/clue/redis-react/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "dflydev/dot-access-data",
+      "version": "v3.0.3",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/a51874d3253d042002b8971c778102223ca89048c5b71c46e58f7bb5bc728941.txt",
+          "sha256": "a51874d3253d042002b8971c778102223ca89048c5b71c46e58f7bb5bc728941",
+          "source": "vendor/dflydev/dot-access-data/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "doctrine/inflector",
+      "version": "2.1.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/ecd726866355b7a96c6c49f8ac3e9992d7e48da2bff756697b7b98cde5f69bbc.txt",
+          "sha256": "ecd726866355b7a96c6c49f8ac3e9992d7e48da2bff756697b7b98cde5f69bbc",
+          "source": "vendor/doctrine/inflector/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "doctrine/lexer",
+      "version": "3.0.1",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/1a3f34d131b4e4af999549ed676a0e842d007427f08785750d45bae82728c772.txt",
+          "sha256": "1a3f34d131b4e4af999549ed676a0e842d007427f08785750d45bae82728c772",
+          "source": "vendor/doctrine/lexer/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "dragonmantank/cron-expression",
+      "version": "v3.6.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/adbbf6c8829fa66f18592055b0e3abd5da8f721c4d91db0d2251c46f7db1edc5.txt",
+          "sha256": "adbbf6c8829fa66f18592055b0e3abd5da8f721c4d91db0d2251c46f7db1edc5",
+          "source": "vendor/dragonmantank/cron-expression/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "egulias/email-validator",
+      "version": "4.0.4",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/2e56ccade3e89c00da1b1bb33f24faaed6704605e339b44f52b8c31ef9f04b82.txt",
+          "sha256": "2e56ccade3e89c00da1b1bb33f24faaed6704605e339b44f52b8c31ef9f04b82",
+          "source": "vendor/egulias/email-validator/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "evenement/evenement",
+      "version": "v3.0.2",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/2858f24e4d8df168d06c88ead22355c1d1df84b923efd912b78b3c702b9f6747.txt",
+          "sha256": "2858f24e4d8df168d06c88ead22355c1d1df84b923efd912b78b3c702b9f6747",
+          "source": "vendor/evenement/evenement/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "fruitcake/php-cors",
+      "version": "v1.4.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/5c584152649d495dcdf6ceb8ec2640cd5bcc63cbe331e540e7250d581beb7ead.txt",
+          "sha256": "5c584152649d495dcdf6ceb8ec2640cd5bcc63cbe331e540e7250d581beb7ead",
+          "source": "vendor/fruitcake/php-cors/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "graham-campbell/result-type",
+      "version": "v1.1.4",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/2ad762ec387e2e92c32420e871bebb4ea15d4ad878d20f1a9e67d48cbcf9c9b6.txt",
+          "sha256": "2ad762ec387e2e92c32420e871bebb4ea15d4ad878d20f1a9e67d48cbcf9c9b6",
+          "source": "vendor/graham-campbell/result-type/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "guzzlehttp/guzzle",
+      "version": "7.10.1",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/1090e16630dfd10d5f79be2fb68c4f2f0b168cc34fae57eca7150f735078332d.txt",
+          "sha256": "1090e16630dfd10d5f79be2fb68c4f2f0b168cc34fae57eca7150f735078332d",
+          "source": "vendor/guzzlehttp/guzzle/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "guzzlehttp/promises",
+      "version": "2.3.1",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/098313b3908e2a799731aa3816386fe33af0bef21dbe6acc75e7c98958ec89ed.txt",
+          "sha256": "098313b3908e2a799731aa3816386fe33af0bef21dbe6acc75e7c98958ec89ed",
+          "source": "vendor/guzzlehttp/promises/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "guzzlehttp/psr7",
+      "version": "2.10.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/709437fdecfeb9f22f71d0c144eb4d11938b99a7665f650e6f49fb9dcbfcce84.txt",
+          "sha256": "709437fdecfeb9f22f71d0c144eb4d11938b99a7665f650e6f49fb9dcbfcce84",
+          "source": "vendor/guzzlehttp/psr7/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "guzzlehttp/uri-template",
+      "version": "v1.0.5",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/4265292d1f8887f445cec60fb0d97698603d335ad1bb9b3f988f2a0555c063ae.txt",
+          "sha256": "4265292d1f8887f445cec60fb0d97698603d335ad1bb9b3f988f2a0555c063ae",
+          "source": "vendor/guzzlehttp/uri-template/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "laravel/framework",
+      "version": "v12.60.1",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7.txt",
+          "sha256": "7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7",
+          "source": "vendor/laravel/framework/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "name": "laravel/prompts",
+      "version": "v0.3.18",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7.txt",
+          "sha256": "7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7",
+          "source": "vendor/laravel/prompts/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "name": "laravel/reverb",
+      "version": "v1.10.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7.txt",
+          "sha256": "7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7",
+          "source": "vendor/laravel/reverb/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "name": "laravel/sanctum",
+      "version": "v4.2.1",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7.txt",
+          "sha256": "7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7",
+          "source": "vendor/laravel/sanctum/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "name": "laravel/serializable-closure",
+      "version": "v2.0.13",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7.txt",
+          "sha256": "7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7",
+          "source": "vendor/laravel/serializable-closure/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "name": "laravel/tinker",
+      "version": "v2.10.2",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7.txt",
+          "sha256": "7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7",
+          "source": "vendor/laravel/tinker/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "name": "league/commonmark",
+      "version": "2.8.2",
+      "declared_license": [
+        "BSD-3-Clause"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/80043e4e2ba13ff485810363631657baae7e2a2a02ef62b463bf1661134ac56c.txt",
+          "sha256": "80043e4e2ba13ff485810363631657baae7e2a2a02ef62b463bf1661134ac56c",
+          "source": "vendor/league/commonmark/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "league/config",
+      "version": "v1.2.0",
+      "declared_license": [
+        "BSD-3-Clause"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/606d0cd2fa9148dceaad6a1f6ccf83dbec4ee375dadc960ab6ad5a18adb6db84.txt",
+          "sha256": "606d0cd2fa9148dceaad6a1f6ccf83dbec4ee375dadc960ab6ad5a18adb6db84",
+          "source": "vendor/league/config/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "name": "league/flysystem",
+      "version": "3.34.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/fd2d704048994f2512569d2b0064ae8c91ae9c3bbaf7f6a33d627e3229dcbca3.txt",
+          "sha256": "fd2d704048994f2512569d2b0064ae8c91ae9c3bbaf7f6a33d627e3229dcbca3",
+          "source": "vendor/league/flysystem/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "league/flysystem-local",
+      "version": "3.31.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/fd2d704048994f2512569d2b0064ae8c91ae9c3bbaf7f6a33d627e3229dcbca3.txt",
+          "sha256": "fd2d704048994f2512569d2b0064ae8c91ae9c3bbaf7f6a33d627e3229dcbca3",
+          "source": "vendor/league/flysystem-local/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "league/mime-type-detection",
+      "version": "1.16.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/d189ee0791bb4df7efa56d7852450a449673430d395f263d7d0eb524b35d4c42.txt",
+          "sha256": "d189ee0791bb4df7efa56d7852450a449673430d395f263d7d0eb524b35d4c42",
+          "source": "vendor/league/mime-type-detection/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "league/uri",
+      "version": "7.8.1",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/bb7f984073bf5083be5cd56d144bf3508181409ee6a866b51538725a3dd8ce24.txt",
+          "sha256": "bb7f984073bf5083be5cd56d144bf3508181409ee6a866b51538725a3dd8ce24",
+          "source": "vendor/league/uri/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "league/uri-interfaces",
+      "version": "7.8.1",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/bb7f984073bf5083be5cd56d144bf3508181409ee6a866b51538725a3dd8ce24.txt",
+          "sha256": "bb7f984073bf5083be5cd56d144bf3508181409ee6a866b51538725a3dd8ce24",
+          "source": "vendor/league/uri-interfaces/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "monolog/monolog",
+      "version": "3.10.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/3a351f8f434ff941f4946afb534f7df1185523638b311c22901631d8882f70e1.txt",
+          "sha256": "3a351f8f434ff941f4946afb534f7df1185523638b311c22901631d8882f70e1",
+          "source": "vendor/monolog/monolog/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "nesbot/carbon",
+      "version": "3.11.4",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/57a20d90f47d71dbfbb681c33f909bdc9e3ba2b82eeb187be1ed19a4910a23c5.txt",
+          "sha256": "57a20d90f47d71dbfbb681c33f909bdc9e3ba2b82eeb187be1ed19a4910a23c5",
+          "source": "vendor/nesbot/carbon/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "nette/schema",
+      "version": "v1.3.5",
+      "declared_license": [
+        "BSD-3-Clause",
+        "GPL-2.0-only",
+        "GPL-3.0-only"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/b3bc3d38b9ec29d98bc83bd5fa44e583e8303cd97b62d203a9e5e21935126de9.txt",
+          "sha256": "b3bc3d38b9ec29d98bc83bd5fa44e583e8303cd97b62d203a9e5e21935126de9",
+          "source": "vendor/nette/schema/license.md"
+        }
+      ],
+      "selected_alternative": "BSD-3-Clause"
+    },
+    {
+      "name": "nette/utils",
+      "version": "v4.1.4",
+      "declared_license": [
+        "BSD-3-Clause",
+        "GPL-2.0-only",
+        "GPL-3.0-only"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/b3bc3d38b9ec29d98bc83bd5fa44e583e8303cd97b62d203a9e5e21935126de9.txt",
+          "sha256": "b3bc3d38b9ec29d98bc83bd5fa44e583e8303cd97b62d203a9e5e21935126de9",
+          "source": "vendor/nette/utils/license.md"
+        }
+      ],
+      "selected_alternative": "BSD-3-Clause"
+    },
+    {
+      "name": "nikic/php-parser",
+      "version": "v5.6.2",
+      "declared_license": [
+        "BSD-3-Clause"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/dd859e107fac9f87a4413ab8c3c96f0f1611a17f596a2db562a5a4f4904c1e97.txt",
+          "sha256": "dd859e107fac9f87a4413ab8c3c96f0f1611a17f596a2db562a5a4f4904c1e97",
+          "source": "vendor/nikic/php-parser/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "nunomaduro/termwind",
+      "version": "v2.4.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/90c8b018f3de7647f2584e2ffd5e5d5d6e14771b3d1091ffb59096968a904f71.txt",
+          "sha256": "90c8b018f3de7647f2584e2ffd5e5d5d6e14771b3d1091ffb59096968a904f71",
+          "source": "vendor/nunomaduro/termwind/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "name": "paragonie/random_compat",
+      "version": "v9.99.100",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/e79a4c7d03c72850c60b2d5c41c2f92d33448ed2b243bd4686cfa7674e15e3ba.txt",
+          "sha256": "e79a4c7d03c72850c60b2d5c41c2f92d33448ed2b243bd4686cfa7674e15e3ba",
+          "source": "vendor/paragonie/random_compat/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "paragonie/sodium_compat",
+      "version": "v1.24.0",
+      "declared_license": [
+        "ISC"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/1f74dfe6e7621f71daf7928dcd522a86dedd1118307fe48256e726d38effc8f7.txt",
+          "sha256": "1f74dfe6e7621f71daf7928dcd522a86dedd1118307fe48256e726d38effc8f7",
+          "source": "vendor/paragonie/sodium_compat/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "phpoption/phpoption",
+      "version": "1.9.5",
+      "declared_license": [
+        "Apache-2.0"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1.txt",
+          "sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+          "source": "vendor/phpoption/phpoption/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "psr/clock",
+      "version": "1.0.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/8f35dcf3247dcce7f0c4d1ad51de19726a56a43ced7a59ad1df0378125ac9227.txt",
+          "sha256": "8f35dcf3247dcce7f0c4d1ad51de19726a56a43ced7a59ad1df0378125ac9227",
+          "source": "vendor/psr/clock/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "psr/container",
+      "version": "2.0.2",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/0688ee39285c33067ad77d82349cdacb5569756bea4398b34bb223af9e57f1c0.txt",
+          "sha256": "0688ee39285c33067ad77d82349cdacb5569756bea4398b34bb223af9e57f1c0",
+          "source": "vendor/psr/container/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "psr/event-dispatcher",
+      "version": "1.0.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/d2e70341a9667b93ad542e4842b0b7022d302aa7c2d2a909b156b8f1e3c4cca8.txt",
+          "sha256": "d2e70341a9667b93ad542e4842b0b7022d302aa7c2d2a909b156b8f1e3c4cca8",
+          "source": "vendor/psr/event-dispatcher/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "psr/http-client",
+      "version": "1.0.3",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/ea5ec78820494a5256b0ccbecef9212bc7b93b797273ab08cc2eaa34e0ab3e50.txt",
+          "sha256": "ea5ec78820494a5256b0ccbecef9212bc7b93b797273ab08cc2eaa34e0ab3e50",
+          "source": "vendor/psr/http-client/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "psr/http-factory",
+      "version": "1.1.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/d2e70341a9667b93ad542e4842b0b7022d302aa7c2d2a909b156b8f1e3c4cca8.txt",
+          "sha256": "d2e70341a9667b93ad542e4842b0b7022d302aa7c2d2a909b156b8f1e3c4cca8",
+          "source": "vendor/psr/http-factory/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "psr/http-message",
+      "version": "2.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/8d36e938943b04ef01994bb148793c971685b746d0ced31da03a97594a47ee62.txt",
+          "sha256": "8d36e938943b04ef01994bb148793c971685b746d0ced31da03a97594a47ee62",
+          "source": "vendor/psr/http-message/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "psr/log",
+      "version": "3.0.2",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/6e944907067bae93c00a9f2ad51032243820b22df34b77c77690d46cb2e98e24.txt",
+          "sha256": "6e944907067bae93c00a9f2ad51032243820b22df34b77c77690d46cb2e98e24",
+          "source": "vendor/psr/log/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "psr/simple-cache",
+      "version": "3.0.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/9d7269855b25e36b54461c029260a56c97499a647117ea37f4c5cdfc956a7f8b.txt",
+          "sha256": "9d7269855b25e36b54461c029260a56c97499a647117ea37f4c5cdfc956a7f8b",
+          "source": "vendor/psr/simple-cache/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "name": "psy/psysh",
+      "version": "v0.12.15",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/d9b7e103df71de9a9b145587f11a99c0580edfd95e7144f47e208e2ee8a65b12.txt",
+          "sha256": "d9b7e103df71de9a9b145587f11a99c0580edfd95e7144f47e208e2ee8a65b12",
+          "source": "vendor/psy/psysh/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "pusher/pusher-php-server",
+      "version": "7.2.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "original upstream copyright/license section plus linked canonical MIT terms",
+      "notices": [
+        {
+          "path": "third-party/licenses/72adc6d648078bde02805e676e33bf21d722bd4742f9fd50a71a8ad6759b443c.txt",
+          "sha256": "72adc6d648078bde02805e676e33bf21d722bd4742f9fd50a71a8ad6759b443c",
+          "source": "https://raw.githubusercontent.com/pusher/pusher-http-php/7ed4a62956c7426814c7dc67b2bb764cd0e1a603/README.md#license ; canonical MIT terms: https://raw.githubusercontent.com/spdx/license-list-data/main/text/MIT.txt"
+        }
+      ]
+    },
+    {
+      "name": "ralouphie/getallheaders",
+      "version": "3.0.3",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/e97490769229e08f0a017f5c6fd5d8aa1669672110c6df5ebd0506f23ec91087.txt",
+          "sha256": "e97490769229e08f0a017f5c6fd5d8aa1669672110c6df5ebd0506f23ec91087",
+          "source": "vendor/ralouphie/getallheaders/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "ramsey/collection",
+      "version": "2.1.1",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/aa1e787bd6d05172d2962fa865a592af00ec474984d6b5bcb9a0df91abe8717d.txt",
+          "sha256": "aa1e787bd6d05172d2962fa865a592af00ec474984d6b5bcb9a0df91abe8717d",
+          "source": "vendor/ramsey/collection/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "ramsey/uuid",
+      "version": "4.9.2",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/9e8bf008e16a9ee5cc2d3bfe60701ec2351a2ddf29e9092275f71441a6d5a167.txt",
+          "sha256": "9e8bf008e16a9ee5cc2d3bfe60701ec2351a2ddf29e9092275f71441a6d5a167",
+          "source": "vendor/ramsey/uuid/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "ratchet/rfc6455",
+      "version": "v0.4.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/cf6dceda3c481ef979bef83de662ec1dcecd88a767b015c746ead839d1ef4a78.txt",
+          "sha256": "cf6dceda3c481ef979bef83de662ec1dcecd88a767b015c746ead839d1ef4a78",
+          "source": "vendor/ratchet/rfc6455/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "react/cache",
+      "version": "v1.2.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/edc8e8a071bce730193e22b4f3845d3fa826d706ee1ea3cb5acb4b7fa89000b2.txt",
+          "sha256": "edc8e8a071bce730193e22b4f3845d3fa826d706ee1ea3cb5acb4b7fa89000b2",
+          "source": "vendor/react/cache/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "react/dns",
+      "version": "v1.14.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/edc8e8a071bce730193e22b4f3845d3fa826d706ee1ea3cb5acb4b7fa89000b2.txt",
+          "sha256": "edc8e8a071bce730193e22b4f3845d3fa826d706ee1ea3cb5acb4b7fa89000b2",
+          "source": "vendor/react/dns/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "react/event-loop",
+      "version": "v1.6.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/edc8e8a071bce730193e22b4f3845d3fa826d706ee1ea3cb5acb4b7fa89000b2.txt",
+          "sha256": "edc8e8a071bce730193e22b4f3845d3fa826d706ee1ea3cb5acb4b7fa89000b2",
+          "source": "vendor/react/event-loop/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "react/promise",
+      "version": "v3.3.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/9f298e074f98e26e819fc536cdf4a5fd3adfb10587b2bbc6a3cbb23ffcd87652.txt",
+          "sha256": "9f298e074f98e26e819fc536cdf4a5fd3adfb10587b2bbc6a3cbb23ffcd87652",
+          "source": "vendor/react/promise/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "react/promise-timer",
+      "version": "v1.11.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/f004fb71a6fc299d3105230ac78529bf175ee557b90b7e84beb9432e788b65df.txt",
+          "sha256": "f004fb71a6fc299d3105230ac78529bf175ee557b90b7e84beb9432e788b65df",
+          "source": "vendor/react/promise-timer/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "react/socket",
+      "version": "v1.17.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/edc8e8a071bce730193e22b4f3845d3fa826d706ee1ea3cb5acb4b7fa89000b2.txt",
+          "sha256": "edc8e8a071bce730193e22b4f3845d3fa826d706ee1ea3cb5acb4b7fa89000b2",
+          "source": "vendor/react/socket/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "react/stream",
+      "version": "v1.4.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/edc8e8a071bce730193e22b4f3845d3fa826d706ee1ea3cb5acb4b7fa89000b2.txt",
+          "sha256": "edc8e8a071bce730193e22b4f3845d3fa826d706ee1ea3cb5acb4b7fa89000b2",
+          "source": "vendor/react/stream/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "rybakit/msgpack",
+      "version": "v0.9.1",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/58f17311737f2cc96cb21fbbcc68fb92d3eca0116241f84798791f1e913a36f2.txt",
+          "sha256": "58f17311737f2cc96cb21fbbcc68fb92d3eca0116241f84798791f1e913a36f2",
+          "source": "vendor/rybakit/msgpack/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/clock",
+      "version": "v7.4.8",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/6439cc1bba78b7de0c1905b0643679a5a7768ba020a090370d7742030303c6b2.txt",
+          "sha256": "6439cc1bba78b7de0c1905b0643679a5a7768ba020a090370d7742030303c6b2",
+          "source": "vendor/symfony/clock/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/console",
+      "version": "v7.4.11",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb.txt",
+          "sha256": "18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb",
+          "source": "vendor/symfony/console/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/css-selector",
+      "version": "v7.4.9",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb.txt",
+          "sha256": "18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb",
+          "source": "vendor/symfony/css-selector/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/deprecation-contracts",
+      "version": "v3.7.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/b92809182501f0fa422167ea44484b41877e1736e8283d0377fdc9664bb9a02d.txt",
+          "sha256": "b92809182501f0fa422167ea44484b41877e1736e8283d0377fdc9664bb9a02d",
+          "source": "vendor/symfony/deprecation-contracts/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/error-handler",
+      "version": "v7.4.8",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/0bedd88a1c55457e9731dd9b99ceb976675bee5412d9565eb31ac84533df7bb5.txt",
+          "sha256": "0bedd88a1c55457e9731dd9b99ceb976675bee5412d9565eb31ac84533df7bb5",
+          "source": "vendor/symfony/error-handler/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/event-dispatcher",
+      "version": "v7.4.9",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb.txt",
+          "sha256": "18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb",
+          "source": "vendor/symfony/event-dispatcher/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/event-dispatcher-contracts",
+      "version": "v3.7.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/375396ec5755e9c27dd9c513c0eb4c2923881aba98b941f156e92ed6ec1cfa19.txt",
+          "sha256": "375396ec5755e9c27dd9c513c0eb4c2923881aba98b941f156e92ed6ec1cfa19",
+          "source": "vendor/symfony/event-dispatcher-contracts/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/finder",
+      "version": "v7.4.8",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb.txt",
+          "sha256": "18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb",
+          "source": "vendor/symfony/finder/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/http-foundation",
+      "version": "v7.4.8",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb.txt",
+          "sha256": "18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb",
+          "source": "vendor/symfony/http-foundation/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/http-kernel",
+      "version": "v7.4.11",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb.txt",
+          "sha256": "18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb",
+          "source": "vendor/symfony/http-kernel/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/mailer",
+      "version": "v7.4.8",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/0bedd88a1c55457e9731dd9b99ceb976675bee5412d9565eb31ac84533df7bb5.txt",
+          "sha256": "0bedd88a1c55457e9731dd9b99ceb976675bee5412d9565eb31ac84533df7bb5",
+          "source": "vendor/symfony/mailer/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/mime",
+      "version": "v7.4.9",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/b3c56a3a0faa6defe7ad709b765168c2422642624a0480fa087d8b464c9f1913.txt",
+          "sha256": "b3c56a3a0faa6defe7ad709b765168c2422642624a0480fa087d8b464c9f1913",
+          "source": "vendor/symfony/mime/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/polyfill-ctype",
+      "version": "v1.37.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/375396ec5755e9c27dd9c513c0eb4c2923881aba98b941f156e92ed6ec1cfa19.txt",
+          "sha256": "375396ec5755e9c27dd9c513c0eb4c2923881aba98b941f156e92ed6ec1cfa19",
+          "source": "vendor/symfony/polyfill-ctype/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/polyfill-intl-grapheme",
+      "version": "v1.37.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/eaa5d6e59ff1d5322ae36d3ab9124460df72d2d0c8af60a99222e8a90dcbdf31.txt",
+          "sha256": "eaa5d6e59ff1d5322ae36d3ab9124460df72d2d0c8af60a99222e8a90dcbdf31",
+          "source": "vendor/symfony/polyfill-intl-grapheme/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/polyfill-intl-idn",
+      "version": "v1.37.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/718d02a093edb2e5e3f6bd9ddf16417b27b66c4af62bee7b8aba64ebebfa6da0.txt",
+          "sha256": "718d02a093edb2e5e3f6bd9ddf16417b27b66c4af62bee7b8aba64ebebfa6da0",
+          "source": "vendor/symfony/polyfill-intl-idn/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/polyfill-intl-normalizer",
+      "version": "v1.37.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/eaa5d6e59ff1d5322ae36d3ab9124460df72d2d0c8af60a99222e8a90dcbdf31.txt",
+          "sha256": "eaa5d6e59ff1d5322ae36d3ab9124460df72d2d0c8af60a99222e8a90dcbdf31",
+          "source": "vendor/symfony/polyfill-intl-normalizer/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/polyfill-mbstring",
+      "version": "v1.37.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/eaa5d6e59ff1d5322ae36d3ab9124460df72d2d0c8af60a99222e8a90dcbdf31.txt",
+          "sha256": "eaa5d6e59ff1d5322ae36d3ab9124460df72d2d0c8af60a99222e8a90dcbdf31",
+          "source": "vendor/symfony/polyfill-mbstring/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/polyfill-php80",
+      "version": "v1.37.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/b92809182501f0fa422167ea44484b41877e1736e8283d0377fdc9664bb9a02d.txt",
+          "sha256": "b92809182501f0fa422167ea44484b41877e1736e8283d0377fdc9664bb9a02d",
+          "source": "vendor/symfony/polyfill-php80/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/polyfill-php83",
+      "version": "v1.37.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/6439cc1bba78b7de0c1905b0643679a5a7768ba020a090370d7742030303c6b2.txt",
+          "sha256": "6439cc1bba78b7de0c1905b0643679a5a7768ba020a090370d7742030303c6b2",
+          "source": "vendor/symfony/polyfill-php83/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/polyfill-php84",
+      "version": "v1.37.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/db54a3771e71cada8e5a5dd11e5533e985117354057fc268129898ef415683b1.txt",
+          "sha256": "db54a3771e71cada8e5a5dd11e5533e985117354057fc268129898ef415683b1",
+          "source": "vendor/symfony/polyfill-php84/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/polyfill-php85",
+      "version": "v1.37.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/56e762e45c7d6d7873c19a5dac018ca43f5f9a881f8cd9100d1d08d0182b9544.txt",
+          "sha256": "56e762e45c7d6d7873c19a5dac018ca43f5f9a881f8cd9100d1d08d0182b9544",
+          "source": "vendor/symfony/polyfill-php85/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/polyfill-uuid",
+      "version": "v1.37.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/375396ec5755e9c27dd9c513c0eb4c2923881aba98b941f156e92ed6ec1cfa19.txt",
+          "sha256": "375396ec5755e9c27dd9c513c0eb4c2923881aba98b941f156e92ed6ec1cfa19",
+          "source": "vendor/symfony/polyfill-uuid/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/process",
+      "version": "v7.4.11",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb.txt",
+          "sha256": "18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb",
+          "source": "vendor/symfony/process/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/routing",
+      "version": "v7.4.9",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb.txt",
+          "sha256": "18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb",
+          "source": "vendor/symfony/routing/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/service-contracts",
+      "version": "v3.7.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/375396ec5755e9c27dd9c513c0eb4c2923881aba98b941f156e92ed6ec1cfa19.txt",
+          "sha256": "375396ec5755e9c27dd9c513c0eb4c2923881aba98b941f156e92ed6ec1cfa19",
+          "source": "vendor/symfony/service-contracts/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/string",
+      "version": "v7.4.11",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/0bedd88a1c55457e9731dd9b99ceb976675bee5412d9565eb31ac84533df7bb5.txt",
+          "sha256": "0bedd88a1c55457e9731dd9b99ceb976675bee5412d9565eb31ac84533df7bb5",
+          "source": "vendor/symfony/string/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/translation",
+      "version": "v7.4.10",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb.txt",
+          "sha256": "18da7e490d2aa77197a0619b25bcc771a0110132a9d76071665718d3295e73cb",
+          "source": "vendor/symfony/translation/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/translation-contracts",
+      "version": "v3.7.0",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/375396ec5755e9c27dd9c513c0eb4c2923881aba98b941f156e92ed6ec1cfa19.txt",
+          "sha256": "375396ec5755e9c27dd9c513c0eb4c2923881aba98b941f156e92ed6ec1cfa19",
+          "source": "vendor/symfony/translation-contracts/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/uid",
+      "version": "v7.4.9",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/b92809182501f0fa422167ea44484b41877e1736e8283d0377fdc9664bb9a02d.txt",
+          "sha256": "b92809182501f0fa422167ea44484b41877e1736e8283d0377fdc9664bb9a02d",
+          "source": "vendor/symfony/uid/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "symfony/var-dumper",
+      "version": "v7.4.8",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/cbad2ab8fcfa03932eaef0d2c88482f30a4198f18ae7ed6f9cef96a94e861296.txt",
+          "sha256": "cbad2ab8fcfa03932eaef0d2c88482f30a4198f18ae7ed6f9cef96a94e861296",
+          "source": "vendor/symfony/var-dumper/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "tijsverkoyen/css-to-inline-styles",
+      "version": "v2.4.0",
+      "declared_license": [
+        "BSD-3-Clause"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/28bb809fa4dae8ab4a8d26311c8cff9910af2b9ddbcafe1966ab5ce45cc5fa53.txt",
+          "sha256": "28bb809fa4dae8ab4a8d26311c8cff9910af2b9ddbcafe1966ab5ce45cc5fa53",
+          "source": "vendor/tijsverkoyen/css-to-inline-styles/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "name": "vlucas/phpdotenv",
+      "version": "v5.6.3",
+      "declared_license": [
+        "BSD-3-Clause"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/6e220eb4494c0bf146244805783c1e13e43cba29dd18afe8a5d2e4e30492eb31.txt",
+          "sha256": "6e220eb4494c0bf146244805783c1e13e43cba29dd18afe8a5d2e4e30492eb31",
+          "source": "vendor/vlucas/phpdotenv/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "voku/portable-ascii",
+      "version": "2.1.1",
+      "declared_license": [
+        "MIT"
+      ],
+      "scope": "server-runtime-vendor",
+      "provenance": "installed-package",
+      "notices": [
+        {
+          "path": "third-party/licenses/e564345a249cd6664d20956857126d364d95f7b4f0f6cf542711a2c14570c97c.txt",
+          "sha256": "e564345a249cd6664d20956857126d364d95f7b4f0f6cf542711a2c14570c97c",
+          "source": "vendor/voku/portable-ascii/LICENSE.txt"
+        }
+      ]
+    },
+    {
+      "name": "Laravel-derived welcome/mail/scaffold resources",
+      "version": "Laravel 12.x / installed framework notice",
+      "declared_license": "MIT",
+      "scope": "copied-server-source",
+      "provenance": "upstream skeleton MIT metadata and installed framework license; local modifications retain upstream notices",
+      "notices": [
+        {
+          "path": "third-party/licenses/7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7.txt",
+          "sha256": "7b4f9149597fbae2ce689bc9317d1869e17f1b3fa5f01c289998c108f8c37cf7",
+          "source": "vendor/laravel/framework/LICENSE.md"
+        }
+      ]
+    }
+  ]
+}
