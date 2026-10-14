@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-test('user can register', function () {
+test('registration requires email verification before issuing a token', function () {
   $response = $this->postJson('/api/register', [
     'name' => 'Test User',
     'email' => 'testuser@example.com',
@@ -11,13 +11,22 @@ test('user can register', function () {
   ]);
 
   $response->assertStatus(201)
-    ->assertJsonStructure([
-      'data' => ['id', 'name', 'email'],
-      'token',
-    ]);
+    ->assertJsonPath('data.email', 'testuser@example.com')
+    ->assertJsonPath('data.requires_verification', true)
+    ->assertJsonMissingPath('token');
 
   $this->assertDatabaseHas('users', [
     'email' => 'testuser@example.com',
+    'email_verified_at' => null,
+  ]);
+
+  $this->assertDatabaseHas('email_verifications', [
+    'email' => 'testuser@example.com',
+    'verified_at' => null,
+  ]);
+
+  $this->assertDatabaseMissing('personal_access_tokens', [
+    'tokenable_id' => User::where('email', 'testuser@example.com')->sole()->id,
   ]);
 });
 
