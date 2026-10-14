@@ -1,6 +1,6 @@
 # Contributing to the SyncSpace API
 
-Read the [README](README.md), [architecture](docs/ARCHITECTURE.md), [configuration](docs/CONFIGURATION.md), and [testing guide](docs/DEVELOPMENT.md). License ownership and private security reporting still require maintainer decisions.
+Read the [README](README.md), [architecture](docs/ARCHITECTURE.md), [configuration](docs/CONFIGURATION.md), and [testing guide](docs/DEVELOPMENT.md). License ownership still requires maintainer confirmation. Private vulnerability reporting is enabled; [SECURITY.md](SECURITY.md) explains how to use it. The shared [Phase 1 report](https://github.com/aardnsyhs/syncspace/blob/master/docs/OSS_GOVERNANCE_PHASE1.md) records the current governance review.
 
 ## Local workflow
 
@@ -40,3 +40,15 @@ Bug reports should include the endpoint/workflow, expected and observed behavior
 Keep pull requests focused. Explain the resulting behavior, validation, documentation changes, and any matching frontend work. Discuss breaking API/schema changes with the maintainer before implementation and provide a compatibility/deployment plan.
 
 No review SLA, release cadence, CLA, or contributor approval policy is established in tracked files. Maintainers decide merges and may request changes. Be respectful and support technical claims with evidence. Use [SECURITY.md](SECURITY.md) for vulnerabilities.
+
+## Triage, scope, and attribution
+
+Maintainers assess reproducibility, affected revisions, impact, and client compatibility when triaging issues. Contributors can help with sanitized reproductions and links to duplicates. A request may need more information or fall outside the maintained API workflows; opening an issue does not commit the project to implementation.
+
+For pull requests, explain authorization effects, response/event compatibility, migration risks, validation, and matching client work. Review may require a smaller change or further evidence. Document upgrade/rollback implications and communicate breaking changes before merging or releasing.
+
+Preserve accurate author metadata and upstream notices. Credit collaborators only with their consent. Identify copied/generated material and its source/license in the pull request; do not imply that credit establishes redistribution permission. Do not submit third-party material whose redistribution rights you cannot establish.
+
+## Maintenance and releases
+
+No supported release series or backport commitment has been adopted. The default API branch is `main`; that is repository configuration, not a support guarantee. The shared [maintenance proposal](https://github.com/aardnsyhs/syncspace/blob/master/docs/OSS_GOVERNANCE_PHASE1.md#governance-improvements) recommends a reviewed default-branch baseline, explicit support scope, versioned releases, and coordinated client/API release notes. It remains a proposal until the maintainer approves it.
